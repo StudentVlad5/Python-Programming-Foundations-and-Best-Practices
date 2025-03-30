@@ -9,7 +9,7 @@ class Record:
         try:
             self.name = Name(name)
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             self.name = None
         self.phones = []
         self.birthday = None
@@ -20,7 +20,7 @@ class Record:
             self.phones.append(valid_phone)
             return 1
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             return 0
 
     def delete_phone(self, phone):
@@ -28,7 +28,7 @@ class Record:
             self.phones = [p for p in self.phones if p.value != phone]
             return 1
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             return 0
 
     def edit_phone(self, old_phone, new_phone):
@@ -38,20 +38,20 @@ class Record:
                     self.add_phone(new_phone)
                     self.delete_phone(old_phone)
                     return 1
-            raise ValueError(f"Phone number {old_phone} not found.")
+            raise ValueError(colored(f"Phone number {old_phone} not found.", 'red'))
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             return 0
     @input_error
     def add_birthday(self, birthday):
         if self.birthday is not None:
-            print(f"Birthday for {self.name.value} already exists.")
+            print(colored(f"Birthday for {self.name.value} already exists.", 'red'))
             return 0
         try:
             self.birthday = Birthday(birthday)
             return 1
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             return 0
     
     def delete_birthday(self):
@@ -62,7 +62,7 @@ class Record:
             self.birthday = Birthday(new_birthday)
             return 1
         except ValueError as e:
-            print(f"Error: {e}")
+            print(colored(f"Error: {e}", 'red'))
             return 0
     @input_error
     def show_birthday(self):

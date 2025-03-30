@@ -11,5 +11,4 @@ class Phone(Field):
 
     @staticmethod
     def validate_phone(value):
-         print(f"Validating phone: {value} ({type(value)})")
          return bool(isinstance(value, str) and re.match(r"^\d{10}$", value))
