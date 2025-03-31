@@ -3,7 +3,7 @@ from services.file_manager import load_data, save_data
 from services.data_parse_input import parse_input
 from modules.AddressBook_m.addressbook_m import AddressBook
 from modules.Notes_m.note_m import Note
-from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact
+from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact, add_email, show_email, add_address, show_address
 from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_message, edit_message, delete_note, search_tag, search_message
 from modules.Common_m.CONSTANT import filename, filenameNotes
 
@@ -24,11 +24,16 @@ def main():
     #  addressBook commands
         "add": lambda args: add_contact(book, args),
         "add-phone": lambda args: add_phone(book, args),
+        "add-email": lambda args: add_email(book, args),
         "add-birthday": lambda args: add_birthday(book, args),
+        "add-address": lambda args: add_address(book, args),
         "all": lambda _: show_all_contacts(book),
         "phone": lambda args: show_phone(book, args),
+        "email": lambda args: show_email(book, args),
         "birthday": lambda args: show_birthday(book, args),
+        "address": lambda args: show_address(book, args),
         "delete": lambda args: delete_contact(book, args),
+        
     #  notes commands
         "add-note": lambda args: add_note(notes, args),
         "all-note": lambda _: show_all_notes(notes),
