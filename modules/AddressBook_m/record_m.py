@@ -17,7 +17,7 @@ class Record:
         self.emails = []
         self.birthday = None
         self.address = None
-
+# add phone, birthday, address and email
     def add_phone(self, phone):
         try:
             valid_phone = Phone(phone) 
@@ -27,26 +27,6 @@ class Record:
             print(colored(f"Error: {e}", 'red'))
             return 0
 
-    def delete_phone(self, phone):
-        try: 
-            self.phones = [p for p in self.phones if p.value != phone]
-            return 1
-        except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 0
-
-    def edit_phone(self, old_phone, new_phone):
-        try:
-            for p in self.phones:
-                if p.value == old_phone:
-                    self.add_phone(new_phone)
-                    self.delete_phone(old_phone)
-                    return 1
-            raise ValueError(colored(f"Phone number {old_phone} not found.", 'red'))
-        except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 0
-    
     @input_error
     def add_birthday(self, birthday):
         if self.birthday is not None:
@@ -59,23 +39,6 @@ class Record:
             print(colored(f"Error: {e}", 'red'))
             return 0
     
-    def delete_birthday(self):
-        self.birthday = None
-    
-    def edit_birthday(self, new_birthday):
-        try:
-            self.birthday = Birthday(new_birthday)
-            return 1
-        except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 0
-    
-    @input_error
-    def show_birthday(self):
-        if self.birthday is None:
-            return f"{colored("Birthday for",'yellow')} {colored(self.name.value, 'red')}{colored(" is not set.", 'yellow')}"
-        return self.birthday.value.strftime("%d.%m.%Y")
-
     def add_email(self, email):
         try:
             valid_email = Email(email) 
@@ -85,6 +48,29 @@ class Record:
             print(colored(f"Error: {e}", 'red'))
             return 0
 
+    def add_address(self, address):
+        try:
+            self.address = address
+            return 1
+        except ValueError as e:
+            print(colored(f"Error: {e}", 'red'))
+            return 0
+
+# delete phone, birthday, address and email
+    def delete_phone(self, phone):
+        try: 
+            self.phones = [p for p in self.phones if p.value != phone]
+            return 1
+        except ValueError as e:
+            print(colored(f"Error: {e}", 'red'))
+            return 0
+
+    def delete_birthday(self):
+        self.birthday = None
+
+    def delete_address(self):
+        self.address = None
+
     def delete_email(self, email):
         try: 
             self.emails = [em for em in self.emails if em.value != email]
@@ -93,6 +79,27 @@ class Record:
             print(colored(f"Error: {e}", 'red'))
             return 0
 
+# edit phone, birthday, address and email
+    def edit_phone(self, old_phone, new_phone):
+        try:
+            for p in self.phones:
+                if p.value == old_phone:
+                    self.add_phone(new_phone)
+                    self.delete_phone(old_phone)
+                    return 1
+            raise ValueError(colored(f"Phone number {old_phone} not found.", 'red'))
+        except ValueError as e:
+            print(colored(f"Error: {e}", 'red'))
+            return 0
+
+    def edit_birthday(self, new_birthday):
+        try:
+            self.birthday = Birthday(new_birthday)
+            return 1
+        except ValueError as e:
+            print(colored(f"Error: {e}", 'red'))
+            return 0
+    
     def edit_email(self, old_email, new_email):
         try:
             for em in self.emails:
@@ -104,17 +111,6 @@ class Record:
         except ValueError as e:
             print(colored(f"Error: {e}", 'red'))
             return 0
-    
-    def add_address(self, address):
-        try:
-            self.address = address
-            return 1
-        except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 0
-
-    def delete_address(self):
-        self.address = None
 
     def edit_address(self, new_address):
         try:
@@ -123,8 +119,30 @@ class Record:
         except ValueError as e:
             print(colored(f"Error: {e}", 'red'))
             return 0
+
+# show birthday, address, email, phone    
+    @input_error
+    def show_birthday(self):
+        if self.birthday is None:
+            return f"{colored("Birthday for",'yellow')} {colored(self.name.value, 'red')}{colored(" is not set.", 'yellow')}"
+        return self.birthday.value.strftime("%d.%m.%Y")
+
+    def show_address(self):
+        if self.address is None:
+            return f"{colored("Address for",'yellow')} {colored(self.name.value, 'red')}{colored(" is not set.", 'yellow')}"
+        return self.address
     
+    def show_email(self):
+        if self.emails is None:
+            return f"{colored("Emails for",'yellow')} {colored(self.name.value, 'red')}{colored(" is not set.", 'yellow')}"
+        return ', '.join(str(em.value) for em in self.emails)
     
+    def show_phone(self):
+        if self.phones is None:
+            return f"{colored("Phones for",'yellow')} {colored(self.name.value, 'red')}{colored(" is not set.", 'yellow')}"
+        return ', '.join(str(p.value) for p in self.phones)
+
+
     def __str__(self):
         birthday_str = self.birthday.value.date().strftime("%d.%m.%Y") if self.birthday else "unknown date"
         address_str = self.address if self.address else "unknown"

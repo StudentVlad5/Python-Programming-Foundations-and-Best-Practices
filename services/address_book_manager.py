@@ -159,7 +159,7 @@ def show_phone(book, args):
         record = book.find(name)
         if record:
             if len(record.phones) > 0:
-                print(colored(f"Phones for {name}: {', '.join(str(p.value) for p in record.phones)}", 'green'))
+                print(colored(f"Phones for {name}: {record.show_phone()}", 'green'))
             else: 
                 print(colored(f"Contact {name}: doesn't have phones", 'red'))
         else:
@@ -172,7 +172,7 @@ def show_email(book, args):
         record = book.find(name)
         if record:
             if len(record.emails) > 0:
-                print(colored(f"Emails for {name}: {', '.join(str(em.value) for em in record.emails)}", 'green'))
+                print(colored(f"Emails for {name}: {record.show_email()}", 'green'))
             else: 
                 print(colored(f"Contact {name}: doesn't have email", 'red'))
         else:
@@ -212,71 +212,134 @@ def delete_contact(book, args):
             print(f"Deleted contact {name}.")
             save_data(book.data,filename)
 
-# delete phone (name)
-        elif command == "delete-phone":
-            if len(args) == 2:
-                name, phone = args[0], args[1]
-                record = book.find(name)
-                if record:
-                    if record.delete_phone(phone):
-                        print(f"Deleted phone {phone} for {name}.")
-                        save_data(book.data)  
-                else:
-                    print(f"Error: {name} not found.")
-        # delete birthday (name)
-        elif command == "delete-birthday":
-            if len(args) == 1:
-                name = args[0]
-                record = book.find(name)
-                if record:
-                    record.delete_birthday()
-                    print(f"Deleted birthday for {name}.")
-                    save_data(book.data) 
-                else:
-                    print(f"Error: {name} not found.")
-        # edit phone (name old-phone(10 numbers) new-phone(10 numbers))
-        elif command == "edit-phone":
-            if len(args) >= 3:
-                name, old_phone, new_phone = args[0], args[1], args[2]
-                record = book.find(name)
-                if record:
-                    record.edit_phone(old_phone, new_phone)
-                    print(f"Changed phone for {name}.")
-                    save_data(book.data)
-                else:
-                    print(colored(f"Error: {name} not found.", 'red)'))
-            else:
-                print(colored(f"Please add correct name and two phone numbers", 'red'))
-        # edit birthday (name new-birthday(dd.mm.yyyy))
-        elif command == "edit-birthday":
-            if len(args) == 2:
-                name, new_birthday = args[0], args[1]
-                record = book.find(name)
-                if record:
-                    try: 
-                        record.edit_birthday(new_birthday)
-                        print(colored(f"Edited birthday for {name}.", 'green'))
-                        save_data(book.data)
-                    except Exception as e:
-                         print(colored(f"Error: {e}", 'red'))
-                else:
-                    print(colored(f"Error: {name} not found.", 'red'))
-        # see  birthdays [today + 7 days]
-        # edit birthday (fix-date(dd.mm.yyyy)) [fix-date + 7 days]
-        elif command == "birthdays":
-            if args:
-                upcoming = book.birthdays(args[0])
-            else:
-                upcoming = book.birthdays() 
-            if upcoming:
-                print(colored("Upcoming birthdays:", 'green'))
-                for it in upcoming:
-                    print(f"{colored(it['name'], 'magenta')} {colored("on", 'yellow')} {colored(it['congratulation_date'], 'magenta')}")
-            else:
-                print(colored(f"No upcoming birthdays in the next 7 days.", 'magenta'))
-        # see all contact's birthdays 
-        elif command == "birthdays-all":
-            print(colored("All birthdays:", 'green'))
-            for record in book.data.values():
-                print(colored(f"{record.name.value}: {record.show_birthday()}", 'magenta'))
-        # message about invalid command
+# Function to handle command "delete-phone"
+def delete_phone(book, args):
+    if len(args) == 2:
+        name, phone = args[0], args[1]
+        record = book.find(name)
+        if record:
+            if record.delete_phone(phone):
+                print(colored(f"Deleted phone {phone} for {name}.", 'green'))
+                save_data(book.data, filename)  
+        else:
+            print(colored(f"Error: {name} not found.", 'red'))
+    else:
+        print(colored(f"Error: please add contact's name and phone.", 'red'))
+
+# Function to handle command "delete-email"
+def delete_email(book, args):
+    if len(args) == 2:
+        name, email = args[0], args[1]
+        record = book.find(name)
+        if record:
+            if record.delete_email(email):
+                print(colored(f"Deleted email {email} for {name}.", 'green'))
+                save_data(book.data, filename)  
+        else:
+            print(colored(f"Error: {name} not found.", 'red'))
+    else:
+        print(colored(f"Error: please add contact's name and email.", 'red'))
+
+# Function to handle command "delete-birthday"
+def delete_birthday(book, args):
+    if len(args) == 1:
+        name = args[0]
+        record = book.find(name)
+        if record:
+            record.delete_birthday()
+            print(colored(f"Deleted birthday for {name}.", 'green'))
+            save_data(book.data, filename) 
+        else:
+            print(colored(f"Error: {name} not found.",'red'))
+
+# Function to handle command "delete-address"
+def delete_address(book, args):
+    if len(args) == 1:
+        name = args[0]
+        record = book.find(name)
+        if record:
+            record.delete_address()
+            print(colored(f"Deleted address for {name}.", 'green'))
+            save_data(book.data, filename) 
+        else:
+            print(colored(f"Error: {name} not found.",'red'))
+
+# Function to handle command "edit-phone"
+def edit_phone(book, args):
+    if len(args) >= 3:
+        name, old_phone, new_phone = args[0], args[1], args[2]
+        record = book.find(name)
+        if record:
+            record.edit_phone(old_phone, new_phone)
+            print(colored(f"Changed phone for {name}.", 'green'))
+            save_data(book.data, filename)
+        else:
+            print(colored(f"Error: {name} not found.", 'red)'))
+    else:
+        print(colored(f"Please add correct name and two phone numbers", 'red'))
+
+# Function to handle command "edit-email"
+def edit_email(book, args):
+    if len(args) >= 3:
+        name, old_email, new_email = args[0], args[1], args[2]
+        record = book.find(name)
+        if record:
+            record.edit_email(old_email, new_email)
+            print(colored(f"Changed email for {name}.", 'green'))
+            save_data(book.data, filename)
+        else:
+            print(colored(f"Error: {name} not found.", 'red)'))
+    else:
+        print(colored(f"Please add correct name and two emails", 'red'))
+
+# Function to handle command "edit-birthday"
+def edit_birthday(book, args):
+    if len(args) >= 2:
+        name, new_birthday = args[0], args[1]
+        record = book.find(name)
+        if record:
+            try: 
+                record.edit_birthday(new_birthday)
+                print(colored(f"Edited birthday for {name}.", 'green'))
+                save_data(book.data, filename)
+            except Exception as e:
+                    print(colored(f"Error: {e}", 'red'))
+        else:
+            print(colored(f"Error: {name} not found.", 'red'))
+
+# Function to handle command "edit-address"
+def edit_address(book, args):
+    if len(args) >= 2:
+        name, new_address = args[0], args[1]
+        record = book.find(name)
+        if record:
+            try: 
+                record.edit_address(new_address)
+                print(colored(f"Edited address for {name}.", 'green'))
+                save_data(book.data, filename)
+            except Exception as e:
+                    print(colored(f"Error: {e}", 'red'))
+        else:
+            print(colored(f"Error: {name} not found.", 'red'))
+
+# Function to handle command "birthdays"
+# see  birthdays [today + 7 days]
+# see birthday (fix-date(dd.mm.yyyy)) [fix-date + 7 days]
+def birthdays(book, args):
+    if args:
+        upcoming = book.birthdays(args[0])
+    else:
+        upcoming = book.birthdays() 
+    if upcoming:
+        print(colored("Upcoming birthdays:", 'green'))
+        for it in upcoming:
+            print(f"{colored(it['name'], 'magenta')} {colored("on", 'yellow')} {colored(it['congratulation_date'], 'magenta')}")
+    else:
+        print(colored(f"No upcoming birthdays in the next 7 days.", 'magenta'))
+        
+# Function to handle command "birthdays-all"
+# see all contact's birthdays 
+def birthdays_all(book):
+    print(colored("All birthdays:", 'green'))
+    for record in book.data.values():
+        print(colored(f"{record.name.value}: {record.show_birthday()}", 'magenta'))
