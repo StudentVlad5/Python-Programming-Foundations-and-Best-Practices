@@ -145,13 +145,3 @@ Write tests for any new features or fixes.
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
-
-### Explanation of Key Formatting in Markdown:
-
-- **Headings**: Use `#` for titles, `##` for subheadings, etc. This is how we organize the sections and subsections.
-- **Code Blocks**: Use triple backticks (```) to highlight code blocks (e.g., for installation commands, program output).
-- **Inline Code**: Use single backticks (`` ` ``) for inline code, such as `python main.py`.
-- **Lists**: Use `-` or `*` for bullet points to list commands, features, etc.
-- **Bold Text**: Wrap text in `**` for emphasis (e.g., **AddressBook Features**).
-
-This format should now be properly optimized for GitHub, where it will be easy for users to read and follow. Let me know if you'd like further improvements!
