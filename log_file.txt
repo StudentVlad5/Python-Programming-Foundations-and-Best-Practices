@@ -1,0 +1,4 @@
+2025-04-05 17:02:59 | Function: handle_user_input | Args: ('birthday',) 
+2025-04-05 17:03:15 | Function: handle_user_input | Args: ('birthday 31.12.2025',) 
+2025-04-05 17:04:45 | Function: handle_user_input | Args: ('birthdays 31.12.2025',) 
+2025-04-05 17:04:57 | Function: handle_user_input | Args: ('birthday Vlad',) 

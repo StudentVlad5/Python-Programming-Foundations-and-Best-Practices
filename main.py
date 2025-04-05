@@ -6,8 +6,11 @@ from modules.AddressBook_m.addressbook_m import AddressBook
 from modules.Notes_m.note_m import Note
 from modules.Common_m.CONSTANT import filename, filenameNotes
 from modules.Common_m.dictionary import command_d
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
+from modules.Common_m.dictionary import command_list
 
-
+command_completer = WordCompleter(command_list, ignore_case=True)
 def main():
     book = AddressBook()
     notes = Note()
@@ -21,7 +24,8 @@ def main():
     print(colored("Welcome to the assistant bot!", 'cyan'))
 
     while True:
-        user_input = handle_user_input()
+        user_input = prompt("Enter a command: ", completer=command_completer)
+        handle_user_input(user_input)
         if user_input is None:
             continue
         command, args = parse_input(user_input)
