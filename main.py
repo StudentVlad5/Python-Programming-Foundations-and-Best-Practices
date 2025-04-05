@@ -17,7 +17,8 @@ def main():
     command_dict = command_d(book, notes)
 
     loaded_contacts = load_data(book, filename)
-    book.data.update(loaded_contacts)
+    sorted_loaded_contacts= sorted(loaded_contacts.items(), key=lambda x: x[0])
+    book.data.update(sorted_loaded_contacts)
     loaded_notes = load_data(notes, filenameNotes)
     notes.data.update(loaded_notes)
 

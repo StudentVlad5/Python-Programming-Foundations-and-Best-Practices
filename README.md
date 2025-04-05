@@ -1,8 +1,8 @@
 # Python-Programming-Foundations-and-Best-Practices
 # AddressBook and Notes CLI System
 
-This Python-based command-line application allows users to manage contacts in an AddressBook and organize notes. You can add, view, edit, and delete contact details and notes using a variety of simple commands.
-
+This Python-based command-line application allows users to manage contacts in an sorted AddressBook and organize notes. You can add, view, edit, and delete contact details and notes using a variety of simple commands.
+Akso implemented a decorator for logging user commands. 
 ---
 
 ## Features
@@ -118,6 +118,8 @@ addressbook.pkl – Contains AddressBook data (contacts).
 
 notes.pkl – Contains Notes data.
 
+log_file.txt – Contains commands log.
+
 The system handles serialization and deserialization of this data automatically.
 
 File Structure
@@ -126,13 +128,21 @@ your_project_folder/
 ├── main.py                  # Main program file
 ├── services/                # Contains service logic for AddressBook and Notes
 │   ├── address_book_manager.py
-│   └── note_manager.py
+│   ├── note_manager.py
+│   ├── commands_logs.py
+│   ├── data_parse_input.py
+│   ├── errors_wrap.py
+│   ├── file_manager.py
+│   └── promt_toolkit.py
 ├── modules/                 # Contains the AddressBook and Notes classes
 │   ├── AddressBook_m/
 │   ├── Notes_m/
 │   └── Common_m/
 ├── requirements.txt         # List of dependencies
 ├── .gitignore               # Git ignore file
+├── log_file.txt             # Logs of user's commands
+├── addressbook.pkl          # Data of address contacts
+├── notes.pkl                # Data of notes
 └── README.md                # Project documentation
 
 Contributing

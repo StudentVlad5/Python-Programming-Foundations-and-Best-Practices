@@ -128,7 +128,6 @@ def edit_message(notes, args):
         else:
             print(colored(f"Error: Message format is incorrect for '{message}'.", 'red'))
 
-
 # Function to handle command "delete_note"
 def delete_note(notes, args):
     if len(args) < 1:
