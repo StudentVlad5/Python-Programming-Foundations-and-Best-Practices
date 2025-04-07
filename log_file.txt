@@ -8,3 +8,8 @@
 2025-04-05 19:14:27 | Function: handle_user_input | Args: ('edit-address Vlad Poltava,UA',) 
 2025-04-05 19:14:52 | Function: handle_user_input | Args: ('edit-address Jane  NY,USA',) 
 2025-04-05 19:14:59 | Function: handle_user_input | Args: ('all-contacts',) 
+2025-04-07 21:53:36 | Function: handle_user_input | Args: ('all-contacts',) 
+2025-04-07 21:53:48 | Function: handle_user_input | Args: ('help',) 
+2025-04-07 21:53:53 | Function: handle_user_input | Args: ('ls',) 
+2025-04-07 21:53:59 | Function: handle_user_input | Args: ('ex',) 
+2025-04-07 21:54:03 | Function: handle_user_input | Args: ('exit',) 
