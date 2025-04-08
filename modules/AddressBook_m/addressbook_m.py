@@ -17,7 +17,7 @@ class AddressBook(UserDict):
         if name in self.data:
             return self.data[name]
         return None
-
+    
     def delete(self, name):
         if name in self.data:
             del self.data[name]
@@ -25,16 +25,10 @@ class AddressBook(UserDict):
         else:
             console.print(Text("Error: Record for ", style="yellow") + Text(name, style="red") + Text(" not found.", style="yellow"))
             return 0
-    @input_error
-    def birthdays(self, check_day=None):
-        try: 
-            check_date = datetime.strptime(check_day, "%d.%m.%Y")
-        except ValueError:
-            console.print(f"The invalid data of the date {check_day}", style='red')
-            check_date = None
-        today = check_date if check_date else datetime.today().date()
 
-        search_period = 7
+    @input_error
+    def birthdays(self, search_period=7):
+        today = datetime.today().date()
         upcoming_birthdays = []
 
         for user in self.data.values():
@@ -44,7 +38,8 @@ class AddressBook(UserDict):
             birthday = user.birthday.value
             birthday_date = birthday.date()
 
-            for delta in range(search_period + 1):
+
+            for delta in range(int(search_period) + 1):
                 check_date = today + timedelta(days=delta)
 
                 if birthday_date.month == check_date.month and birthday_date.day == check_date.day:

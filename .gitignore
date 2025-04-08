@@ -173,5 +173,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# data savings
+*.txt
 *.pkl
-log_file.txt
