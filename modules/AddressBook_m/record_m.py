@@ -64,11 +64,16 @@ class Record:
 # delete phone, birthday, address and email
     def delete_phone(self, phone):
         try: 
-            self.phones = [p for p in self.phones if p.value != phone]
-            return 1
+            for p in self.phones:
+                if p.value == phone:
+                    self.phones.remove(p)
+                    return 1
+                else:
+                    continue
         except ValueError as e:
             console.print(f"[red]Error: {e}[/red]")
             return 0
+        console.print(f"[red]Wrond phone: {phone}[/red]")
 
     def delete_birthday(self):
         self.birthday = None
@@ -78,11 +83,16 @@ class Record:
 
     def delete_email(self, email):
         try: 
-            self.emails = [em for em in self.emails if em.value != email]
-            return 1
+            for em in self.emails:
+                if em.value == email:
+                    self.emails.remove(em)
+                    return 1
+                else:
+                    continue
         except ValueError as e:
             console.print(f"[red]Error: {e}[/red]")
             return 0
+        console.print(f"[red]Wrond email: {email}[/red]")
 
 # edit phone, birthday, address and email
     def edit_phone(self, old_phone, new_phone):

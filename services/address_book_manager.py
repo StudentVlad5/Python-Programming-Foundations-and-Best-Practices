@@ -282,7 +282,8 @@ def delete_phone(book, args):
         if record:
             if record.delete_phone(phone):
                 console.print(f"[green]Deleted phone {phone} for {name}.[/green]")
-                save_data(book.data, filename)  
+                save_data(book.data, filename)
+                show_contact(book, [name])
         else:
             console.print(f"[red]Error: {name} not found.[/red]")
     else:
@@ -296,7 +297,9 @@ def delete_email(book, args):
         if record:
             if record.delete_email(email):
                 console.print(f"[green]Deleted email {email} for {name}.[/green]")
-                save_data(book.data, filename)  
+                save_data(book.data, filename)
+                show_contact(book, [name])
+                
         else:
             console.print(f"[red]Error: {name} not found.[/red]")
     else:
@@ -311,6 +314,7 @@ def delete_birthday(book, args):
             record.delete_birthday()
             console.print(f"[green]Deleted birthday for [bold]{name}[/bold].[/green]")
             save_data(book.data, filename)
+            show_contact(book, [name])
         else:
             console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
@@ -323,6 +327,7 @@ def delete_address(book, args):
             record.delete_address()
             console.print(f"[green]Deleted address for [bold]{name}[/bold].[/green]")
             save_data(book.data, filename)
+            show_contact(book, [name])
         else:
             console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
@@ -394,7 +399,7 @@ def edit_address(book, args):
 
 # Function to handle command "birthdays"
 # see  birthdays [today + 7 days]
-# see birthday (fix-date(dd.mm.yyyy)) [fix-date + 7 days]
+# see birthday (number of days)
 def birthdays(book, args):
     if args:
         upcoming = book.birthdays(args[0])
@@ -406,7 +411,7 @@ def birthdays(book, args):
         for it in upcoming:
             console.print(f"[magenta]{it['name']}[/magenta] [yellow]on[/yellow] [magenta]{it['congratulation_date']}[/magenta]")
     else:
-        console.print("[magenta]No upcoming birthdays in the next 7 days.[/magenta]")
+        console.print(f"[magenta]No upcoming birthdays in the next {args[0] if args[0] else 7} days.[/magenta]")
         
 # Function to handle command "birthdays-all"
 # see all contact's birthdays 
@@ -419,3 +424,42 @@ def birthdays_all(book):
         birthday = record.show_birthday()
         table.add_row(record.name.value, birthday)
     console.print(table)
+
+#search contact by name
+def search_contact(book, args):
+    if not args:
+        console.print("[red]Please provide a search input.[/red]")
+        return
+    search_input = args[0].lower()
+    results = []
+    for record in book.data.values():  
+        if search_input in record.name.value.lower():   
+            results.append(record)
+    if results:
+        table = Table(
+            title=f"🔍 [bold cyan]Search Results for '{search_input}'",
+            title_style="bold white on dark_green",
+            box=box.ROUNDED,
+            border_style="bright_green",
+            show_lines=True,
+            padding=(0, 1)
+        )
+
+        table.add_column("👤 Name", style="bold green", no_wrap=True)
+        table.add_column("📞 Phones", style="white")
+        table.add_column("✉️  Emails", style="white")
+        table.add_column("🎂 Birthday", style="white")
+        table.add_column("🏠 Address", style="white")
+
+        for record in results:
+            name = f"[bold]{record.name}[/bold]" if record.name else "[dim]—[/dim]"
+            phones = ", ".join([p.value for p in record.phones]) if record.phones else "[dim]—[/dim]"
+            emails = ", ".join([e.value for e in record.emails]) if record.emails else "[dim]—[/dim]"
+            birthday = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "[dim]—[/dim]"
+            address = str(record.address) if record.address else "[dim]—[/dim]"
+
+            table.add_row(name, phones, emails, birthday, address)
+
+        console.print(table)
+    else:
+        console.print(f"[red]No messages found matching '{search_input}'.[/red]")
