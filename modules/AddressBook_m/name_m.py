@@ -1,8 +1,8 @@
 from ..Common_m.field import Field
-from termcolor import colored
+from rich.text import Text
 
 class Name(Field):
     def __init__(self, value):
         if not value:
-            raise ValueError(colored("Name cannot be empty.", 'red'))
+            raise ValueError(Text("Name cannot be empty.", style='red'))
         super().__init__(value)

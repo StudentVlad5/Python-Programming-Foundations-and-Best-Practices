@@ -1,17 +1,20 @@
 from functools import wraps
-from termcolor import colored
+from rich.text import Text
+from rich.console import Console
 
 # wrap of errors
+console=Console()
+
 def input_error(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs): 
         try:
             return func(self, *args, **kwargs)
         except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
         except IndexError:
-            print(colored("Error: Not enough arguments provided.",'red'))
+            console.print(Text("Error: Not enough arguments provided.",style='red'))
         except Exception as e:
-            print(colored(f"Unexpected error: {e}",'red'))
+            console.print(Text(f"Unexpected error: {e}",style='red'))
     return wrapper
 

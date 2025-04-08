@@ -1,4 +1,4 @@
-from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact, add_email, show_email, add_address, show_address, birthdays_all, birthdays, edit_address, edit_birthday, edit_email, edit_phone, delete_address, delete_birthday, delete_email, delete_phone
+from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact, add_email, show_email, add_address, show_address, birthdays_all, birthdays, edit_address, edit_birthday, edit_email, edit_phone, delete_address, delete_birthday, delete_email, delete_phone, show_contact
 from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_message, edit_message, delete_note, search_tag, search_message
 
 def command_d(book, notes):
@@ -12,6 +12,7 @@ def command_d(book, notes):
             "add-email": lambda args: add_email(book, args),
             "add-birthday": lambda args: add_birthday(book, args),
             "add-address": lambda args: add_address(book, args),
+            "contact": lambda args: show_contact(book, args),
             "phone": lambda args: show_phone(book, args),
             "email": lambda args: show_email(book, args),
             "address": lambda args: show_address(book, args),
@@ -52,6 +53,7 @@ def command_d_keys(book=None, notes=None):
             "add-email": lambda args: add_email(book, args),
             "add-birthday": lambda args: add_birthday(book, args),
             "add-address": lambda args: add_address(book, args),
+            "contact": lambda args: show_contact(book, args),
             "phone": lambda args: show_phone(book, args),
             "email": lambda args: show_email(book, args),
             "address": lambda args: show_address(book, args),
@@ -96,6 +98,7 @@ command_list = [
     "add-email (name email)",
     "add-birthday (name birthday(dd.mm.yyyy))",
     "add-address (name address)",
+    "contact (name)",
     "phone (name)",
     "email (name)",
     "address (name)",

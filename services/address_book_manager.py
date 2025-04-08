@@ -1,156 +1,214 @@
-from termcolor import colored
 from modules.AddressBook_m.record_m import Record
-from modules.AddressBook_m.phone_m import Phone
-from modules.AddressBook_m.birthday_m import Birthday
-from modules.AddressBook_m.email_m import Email
-from modules.AddressBook_m.address_m import Address
 from services.file_manager import save_data
 from modules.Common_m.CONSTANT import filename
+from rich.table import Table
+from rich.console import Console
+from rich.panel import Panel
+from rich import box
+
+console = Console()
 
 # Function to handle command "hello"
-def hello():
-    print(colored("How can I help you?", 'blue'))
+def hello(book):
+    console.print("[bold blue]How can I help you?[/bold blue]")
 
 # Function to handle command "add"
 def add_contact(book, args):
     if not args or len(args) < 1:
-        print(colored(f"Missing name", 'red'))
-    else:
+        console.print("[bold red]Missing name[/bold red]")
+        return
+
+    try:
+        name = args[0]
+        phone = args[1] if len(args) > 1 else None
+        birthday = args[2] if len(args) > 2 else None
+        email = args[3] if len(args) > 3 else None
+        address = args[4] if len(args) > 4 else None
+    except Exception as e:
+        console.print(f"[bold red]Error:[/bold red] {e}")
+        return
+
+    record = book.find(name)
+    if record:
+        console.print(f"[yellow]⚠️ Contact '{name}' already exists in your book[/yellow]")
+        return
+
+    record = Record(name)
+
+    if phone:
         try:
-            name = args[0]
-            phone = args[1] if len(args) > 1 else None
-            birthday = args[2] if len(args) > 2 else None
-            email = args[3] if len(args) > 3 else None
-            address = args[4] if len(args) > 4 else None
-        except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
-            return
+            record.add_phone(phone)
+        except ValueError as e:
+            console.print(f"[red]❌ Invalid phone:[/red] {e}")
 
-        record = book.find(name)
-        if record:
-            print(colored(f"You already have contact {name} in your book", 'red'))
-        else:
-            record = Record(name)
-            try:
-                if Phone(phone):
-                    record.add_phone(phone)
-            except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
-            try:
-                if Email(email):
-                    record.add_email(email)
-            except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
-            try:
-                if Birthday(birthday):
-                    record.add_birthday(birthday)
-            except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
-            try:
-                if Address(address):
-                    record.add_address(address)
-            except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
+    if email:
+        try:
+            record.add_email(email)
+        except ValueError as e:
+            console.print(f"[red]❌ Invalid email:[/red] {e}")
 
-            book.add_record(record)
-            save_data(book.data, filename)
-            print(colored(f"Added {name} with phone {phone} with email {email} with address {address} and birthday {birthday}.", 'green'))
+    if birthday:
+        try:
+            record.add_birthday(birthday)
+        except ValueError as e:
+            console.print(f"[red]❌ Invalid birthday:[/red] {e}")
+
+    if address:
+        try:
+            record.add_address(address)
+        except ValueError as e:
+            console.print(f"[red]❌ Invalid address:[/red] {e}")
+
+    book.add_record(record)
+    save_data(book.data, filename)
+
+    console.print(
+        Panel.fit(
+            f"[bold green]✅ Added contact:[/bold green] [cyan]{name}[/cyan]\n"
+            f"[bold]📞 Phone:[/bold] {phone or '[dim]—[/dim]'}\n"
+            f"[bold]✉️  Email:[/bold] {email or '[dim]—[/dim]'}\n"
+            f"[bold]🎂 Birthday:[/bold] {birthday or '[dim]—[/dim]'}\n"
+            f"[bold]🏠 Address:[/bold] {address or '[dim]—[/dim]'}",
+            title="📇 [bold cyan]Contact Added[/bold cyan]",
+            border_style="green"
+        )
+    )
 
 # Function to handle command "add-phone"
 def add_phone(book, args):
     if not args or len(args) < 1:
-        print(colored("Missing name", 'red'))
-    else:
-        try:
-            name = args[0]
-            phone = args[1] if len(args) > 1 else None
-        except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 
+        console.print("[red]Missing name[/red]")
+        return
 
-        record = book.find(name)
-        if record:
-            if phone:
-                try:
-                    if record.add_phone(phone):
-                        book.add_record(record)
-                        save_data(book.data, filename)
-                        print(colored(f"Added {name} with phone {phone}.", 'green'))
-                except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+    try:
+        name = args[0]
+        phone = args[1] if len(args) > 1 else None
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        return
+
+    record = book.find(name)
+    if record:
+        if phone:
+            try:
+                if record.add_phone(phone):
+                    book.add_record(record)
+                    save_data(book.data, filename)
+                    console.print(f"[green]Added [bold]{name}[/bold] with phone [bold]{phone}[/bold].[/green]")
+                    show_contact(book, [name])
+            except Exception as e:
+                console.print(f"[red]Error: {e}[/red]")
 
 # Function to handle command "add-email"
 def add_email(book, args):
     if not args or len(args) < 1:
-        print(colored("Missing name", 'red'))
-    else:
-        try:
-            name = args[0]
-            email = args[1] if len(args) > 1 else None
-        except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 
+        console.print("[red]Missing name[/red]")
+        return
 
-        record = book.find(name)
-        if record:
-            if email:
-                try:
-                    if record.add_email(email):
-                        book.add_record(record)
-                        save_data(book.data, filename)
-                        print(colored(f"Added {name} with email {email}.", 'green'))
-                except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+    try:
+        name = args[0]
+        email = args[1] if len(args) > 1 else None
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        return
+
+    record = book.find(name)
+    if record:
+        if email:
+            try:
+                if record.add_email(email):
+                    book.add_record(record)
+                    save_data(book.data, filename)
+                    console.print(f"[green]Added [bold]{name}[/bold] with email [bold]{email}[/bold].[/green]")
+                    show_contact(book, [name])
+            except Exception as e:
+                console.print(f"[red]Error: {e}[/red]")
 
 # Function to handle command "add-birthday"
 def add_birthday(book, args):
     if not args or len(args) < 1:
-        print(colored("Missing name", 'red'))
-    else:
-        try:
-            name = args[0]
-            birthday = args[1] if len(args) > 1 else None
-        except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 
+        console.print("[red]Missing name[/red]")
+        return
 
-        record = book.find(name)
-        if record:
-            if birthday:
-                try:
-                    if record.add_birthday(birthday):
-                        book.add_record(record)
-                        save_data(book.data, filename)
-                        print(colored(f"Added {name} with birthday {birthday}.", 'green'))
-                except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+    try:
+        name = args[0]
+        birthday = args[1] if len(args) > 1 else None
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        return 
+
+    record = book.find(name)
+    if record:
+        if birthday:
+            try:
+                if record.add_birthday(birthday):
+                    book.add_record(record)
+                    save_data(book.data, filename)
+                    console.print(f"[green]Added [bold]{name}[/bold] with birthday [bold]{birthday}[/bold].[/green]")
+                    show_contact(book, [name])
+            except Exception as e:
+                console.print(f"[red]Error: {e}[/red]")
 
 # Function to handle command "add-address"
 def add_address(book, args):
     if not args or len(args) < 1:
-        print(colored("Missing name", 'red'))
-    else:
-        try:
-            name = args[0]
-            address = args[1] if len(args) > 1 else None
-        except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
-            return 
+        console.print("[red]Missing name[/red]")
+        return
 
-        record = book.find(name)
-        if record:
-            if address:
-                try:
-                    if record.add_address(address):
-                        book.add_record(record)
-                        save_data(book.data, filename)
-                        print(colored(f"Added {name} with address {address}.", 'green'))
-                except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+    try:
+        name = args[0]
+        address = args[1] if len(args) > 1 else None
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        return 
+
+    record = book.find(name)
+    if record:
+        if address:
+            try:
+                if record.add_address(address):
+                    book.add_record(record)
+                    save_data(book.data, filename)
+                    console.print(f"[green]Added [bold]{name}[/bold] with address [bold]{address}[/bold].[/green]")
+                    show_contact(book, [name])
+            except Exception as e:
+                console.print(f"[red]Error: {e}[/red]")
 
 # Function to handle command "all"
 def show_all_contacts(book):
-    print(book)
+    table = Table(
+        title="📒 [bold cyan]Address Book Contacts",
+        title_style="bold white on blue",
+        box=box.ROUNDED,
+        border_style="bright_magenta",
+        show_lines=True,
+        padding=(0, 1)
+    )
+
+    table.add_column("👤 Name", style="bold green", no_wrap=True)
+    table.add_column("📞 Phones", style="white")
+    table.add_column("✉️  Emails", style="white")
+    table.add_column("🎂 Birthday", style="white")
+    table.add_column("🏠 Address", style="white")
+
+    for record in book.data.values():
+        name = f"[bold]{record.name}[/bold]" if record.name else "[dim]—[/dim]"
+        phones = ", ".join([p.value for p in record.phones]) if record.phones else "[dim]—[/dim]"
+        emails = ", ".join([e.value for e in record.emails]) if record.emails else "[dim]—[/dim]"
+        birthday = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "[dim]—[/dim]"
+        address = str(record.address) if record.address else "[dim]—[/dim]"
+
+        table.add_row(name, phones, emails, birthday, address)
+
+    console.print(table)
+
+# Function to handle command "contact"
+def show_contact(book, args):
+    if len(args) == 1:
+        name = args[0]
+        record = book.find(name)
+        if record:
+            print(record.show_contact())
 
 # Function to handle command "phone"
 def show_phone(book, args):
@@ -159,11 +217,11 @@ def show_phone(book, args):
         record = book.find(name)
         if record:
             if len(record.phones) > 0:
-                print(colored(f"Phones for {name}: {record.show_phone()}", 'green'))
-            else: 
-                print(colored(f"Contact {name}: doesn't have phones", 'red'))
+                console.print(f"[green]Phones for [bold]{name}[/bold]: {record.show_phone()}[/green]")
+            else:
+                console.print(f"[red]Contact [bold]{name}[/bold]: doesn't have phones[/red]")
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
 # Function to handle command "email"
 def show_email(book, args):
@@ -172,11 +230,11 @@ def show_email(book, args):
         record = book.find(name)
         if record:
             if len(record.emails) > 0:
-                print(colored(f"Emails for {name}: {record.show_email()}", 'green'))
-            else: 
-                print(colored(f"Contact {name}: doesn't have email", 'red'))
+                console.print(f"[green]Emails for [bold]{name}[/bold]: {record.show_email()}[/green]")
+            else:
+                console.print(f"[red]Contact [bold]{name}[/bold]: doesn't have an email[/red]")
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
 # Function to handle command "birthday"
 def show_birthday(book, args):
@@ -185,11 +243,11 @@ def show_birthday(book, args):
         record = book.find(name)
         if record:
             if record.birthday:
-                print(colored(f"Birthday for {name}: {record.show_birthday()}", 'green'))
-            else: 
-                print(colored(f"Contact {name}: doesn't have birthday date", 'red'))
+                console.print(f"[green]Birthday for [bold]{name}[/bold]: {record.show_birthday()}[/green]")
+            else:
+                console.print(f"[red]Contact [bold]{name}[/bold]: doesn't have a birthday date[/red]")
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
 # Function to handle command "address"
 def show_address(book, args):
@@ -197,20 +255,24 @@ def show_address(book, args):
         name = args[0]
         record = book.find(name)
         if record:
-            if record.address:
-                print(colored(f"Address for {name}: {record.show_address()}", 'green'))
-            else: 
-                print(colored(f"Contact {name}: doesn't have address", 'red'))
-        else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            if "address" in record:
+                console.print(f"[green]Address for {name}: {record['address']}[/green]")
+            else:
+                console.print(f"[red]Contact {name}: doesn't have address [/red]")
+
+    console.print(f"[red]Error: {name} not found.[/red]")
 
 # Function to handle command "delete"
 def delete_contact(book, args):
     if len(args) == 1:
         name = args[0]
         if book.delete(name):
-            print(f"Deleted contact {name}.")
-            save_data(book.data,filename)
+            console.print(f"[green]Deleted contact {name}.[/green]")
+            save_data(book.data, filename)
+        else:
+            console.print(f"[red]Error: {name} not found.[/red]")
+    else:
+        console.print("[red]Error: Please provide a valid contact name.[/red]")
 
 # Function to handle command "delete-phone"
 def delete_phone(book, args):
@@ -219,12 +281,12 @@ def delete_phone(book, args):
         record = book.find(name)
         if record:
             if record.delete_phone(phone):
-                print(colored(f"Deleted phone {phone} for {name}.", 'green'))
+                console.print(f"[green]Deleted phone {phone} for {name}.[/green]")
                 save_data(book.data, filename)  
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: {name} not found.[/red]")
     else:
-        print(colored(f"Error: please add contact's name and phone.", 'red'))
+        console.print(f"[red]Error: please add contact's name and phone.[/red]")
 
 # Function to handle command "delete-email"
 def delete_email(book, args):
@@ -233,12 +295,12 @@ def delete_email(book, args):
         record = book.find(name)
         if record:
             if record.delete_email(email):
-                print(colored(f"Deleted email {email} for {name}.", 'green'))
+                console.print(f"[green]Deleted email {email} for {name}.[/green]")
                 save_data(book.data, filename)  
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: {name} not found.[/red]")
     else:
-        print(colored(f"Error: please add contact's name and email.", 'red'))
+        console.print(f"[red]Error: Please provide the contact's name and email.[/red]")
 
 # Function to handle command "delete-birthday"
 def delete_birthday(book, args):
@@ -247,10 +309,10 @@ def delete_birthday(book, args):
         record = book.find(name)
         if record:
             record.delete_birthday()
-            print(colored(f"Deleted birthday for {name}.", 'green'))
-            save_data(book.data, filename) 
+            console.print(f"[green]Deleted birthday for [bold]{name}[/bold].[/green]")
+            save_data(book.data, filename)
         else:
-            print(colored(f"Error: {name} not found.",'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
 # Function to handle command "delete-address"
 def delete_address(book, args):
@@ -259,10 +321,10 @@ def delete_address(book, args):
         record = book.find(name)
         if record:
             record.delete_address()
-            print(colored(f"Deleted address for {name}.", 'green'))
-            save_data(book.data, filename) 
+            console.print(f"[green]Deleted address for [bold]{name}[/bold].[/green]")
+            save_data(book.data, filename)
         else:
-            print(colored(f"Error: {name} not found.",'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
 
 # Function to handle command "edit-phone"
 def edit_phone(book, args):
@@ -271,12 +333,13 @@ def edit_phone(book, args):
         record = book.find(name)
         if record:
             record.edit_phone(old_phone, new_phone)
-            print(colored(f"Changed phone for {name}.", 'green'))
+            console.print(f"[green]Changed phone for [bold]{name}[/bold].[/green]")
             save_data(book.data, filename)
+            show_contact(book,[name])
         else:
-            print(colored(f"Error: {name} not found.", 'red)'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
     else:
-        print(colored(f"Please add correct name and two phone numbers", 'red'))
+        console.print("[red]Please add correct name and two phone numbers.[/red]")
 
 # Function to handle command "edit-email"
 def edit_email(book, args):
@@ -285,12 +348,13 @@ def edit_email(book, args):
         record = book.find(name)
         if record:
             record.edit_email(old_email, new_email)
-            print(colored(f"Changed email for {name}.", 'green'))
+            console.print(f"[green]Changed email for [bold]{name}[/bold].[/green]")
             save_data(book.data, filename)
+            show_contact(book,[name])
         else:
-            print(colored(f"Error: {name} not found.", 'red)'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
     else:
-        print(colored(f"Please add correct name and two emails", 'red'))
+        console.print("[red]Please add correct name and two emails.[/red]")
 
 # Function to handle command "edit-birthday"
 def edit_birthday(book, args):
@@ -298,14 +362,17 @@ def edit_birthday(book, args):
         name, new_birthday = args[0], args[1]
         record = book.find(name)
         if record:
-            try: 
+            try:
                 record.edit_birthday(new_birthday)
-                print(colored(f"Edited birthday for {name}.", 'green'))
+                console.print(f"[green]Edited birthday for [bold]{name}[/bold].[/green]")
                 save_data(book.data, filename)
+                show_contact(book,[name])
             except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+                console.print(f"[red]Error: {e}[/red]")
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
+    else:
+        console.print("[red]Please provide the name and a new birthday.[/red]")
 
 # Function to handle command "edit-address"
 def edit_address(book, args):
@@ -313,14 +380,17 @@ def edit_address(book, args):
         name, new_address = args[0], args[1]
         record = book.find(name)
         if record:
-            try: 
+            try:
                 record.edit_address(new_address)
-                print(colored(f"Edited address for {name}.", 'green'))
+                console.print(f"[green]Edited address for [bold]{name}[/bold].[/green]")
                 save_data(book.data, filename)
+                show_contact(book,[name])
             except Exception as e:
-                    print(colored(f"Error: {e}", 'red'))
+                console.print(f"[red]Error: {e}[/red]")
         else:
-            print(colored(f"Error: {name} not found.", 'red'))
+            console.print(f"[red]Error: [bold]{name}[/bold] not found.[/red]")
+    else:
+        console.print("[red]Please provide the name and a new address.[/red]")
 
 # Function to handle command "birthdays"
 # see  birthdays [today + 7 days]
@@ -329,17 +399,23 @@ def birthdays(book, args):
     if args:
         upcoming = book.birthdays(args[0])
     else:
-        upcoming = book.birthdays() 
+        upcoming = book.birthdays()
+    
     if upcoming:
-        print(colored("Upcoming birthdays:", 'green'))
+        console.print("[green]Upcoming birthdays:[/green]")
         for it in upcoming:
-            print(f"{colored(it['name'], 'magenta')} {colored("on", 'yellow')} {colored(it['congratulation_date'], 'magenta')}")
+            console.print(f"[magenta]{it['name']}[/magenta] [yellow]on[/yellow] [magenta]{it['congratulation_date']}[/magenta]")
     else:
-        print(colored(f"No upcoming birthdays in the next 7 days.", 'magenta'))
+        console.print("[magenta]No upcoming birthdays in the next 7 days.[/magenta]")
         
 # Function to handle command "birthdays-all"
 # see all contact's birthdays 
 def birthdays_all(book):
-    print(colored("All birthdays:", 'green'))
+    table = Table(show_header=True, header_style="bold green")
+    table.add_column("Name", style="magenta")
+    table.add_column("Birthday", style="magenta")
+    console.print("[green]All birthdays:[/green]")
     for record in book.data.values():
-        print(colored(f"{record.name.value}: {record.show_birthday()}", 'magenta'))
+        birthday = record.show_birthday()
+        table.add_row(record.name.value, birthday)
+    console.print(table)
