@@ -1,11 +1,12 @@
 from ..Common_m.field import Field
 import re
-from termcolor import colored
+from rich.text import Text
 
 class Email(Field):
     def __init__(self, value):
         if value is None or not self.validate_email(value):
-            raise ValueError(f"{colored('Invalid email format: ', 'yellow')}{colored(value, 'red')}")
+            raise ValueError(
+                Text("Invalid email format: ", style="yellow") + Text(value, style="red"))
         super().__init__(value)
         
     @staticmethod

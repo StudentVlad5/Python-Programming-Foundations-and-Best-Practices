@@ -1,11 +1,11 @@
 from ..Common_m.field import Field
 import re
-from termcolor import colored
+from rich.text import Text
 
 class Phone(Field):
     def __init__(self, value):
         if value is None or not self.validate_phone(value):
-            raise ValueError(f"{colored("Invalid phone number format: ", 'yellow')}{colored(value, 'red')}")
+            raise ValueError(f"{Text("Invalid phone number format: ", styled='yellow')}+{Text(value, styled='red')})")
         super().__init__(value)
         
 

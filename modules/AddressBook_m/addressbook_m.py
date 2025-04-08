@@ -1,12 +1,15 @@
 from collections import UserDict
 from services.errors_wrap import input_error
 from datetime import datetime, timedelta
-from termcolor import colored
+from rich.text import Text
+from rich.console import Console
+
+console = Console()
 
 class AddressBook(UserDict):
     def add_record(self, record):
         if record.name is None:
-            print(colored(f"Cannot add a record with an invalid name.", 'red'))
+            console.print(Text("Cannot add a record with an invalid name.", style="red"))
             return
         self.data[record.name.value] = record
 
@@ -20,14 +23,14 @@ class AddressBook(UserDict):
             del self.data[name]
             return 1
         else:
-            print(f"{colored("Error: Record for",'yellow')} {colored(name, 'red')} {colored("not found.", 'yellow')}")
+            console.print(Text("Error: Record for ", style="yellow") + Text(name, style="red") + Text(" not found.", style="yellow"))
             return 0
     @input_error
     def birthdays(self, check_day=None):
         try: 
             check_date = datetime.strptime(check_day, "%d.%m.%Y")
         except ValueError:
-            print(colored(f"The invalid data of the date {check_day}", 'red'))
+            console.print(f"The invalid data of the date {check_day}", style='red')
             check_date = None
         today = check_date if check_date else datetime.today().date()
 

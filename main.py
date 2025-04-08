@@ -1,16 +1,24 @@
-from termcolor import colored
 from services.file_manager import load_data, save_data
 from services.data_parse_input import parse_input
 from services.prompt_toolkit import handle_user_input
 from modules.AddressBook_m.addressbook_m import AddressBook
 from modules.Notes_m.note_m import Note
-from modules.Common_m.CONSTANT import filename, filenameNotes
 from modules.Common_m.dictionary import command_d
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
+from rich.text import Text
+from rich.panel import Panel
+from rich.console import Console
+from modules.Common_m.CONSTANT import filename, filenameNotes
 from modules.Common_m.dictionary import command_list
 
+console = Console()
+welcome_message = Text("[bold cyan]Welcome to the assistant bot![/bold cyan]")
+goodbye_message = Text("[bold blue]Good bye![/bold blue]")
+invalid_command_message = Text("[bold red]Invalid command.[/bold red]")
+
 command_completer = WordCompleter(command_list, ignore_case=True)
+
 def main():
     book = AddressBook()
     notes = Note()
@@ -22,7 +30,7 @@ def main():
     loaded_notes = load_data(notes, filenameNotes)
     notes.data.update(loaded_notes)
 
-    print(colored("Welcome to the assistant bot!", 'cyan'))
+    console.print(Panel(f"🤖 {welcome_message}", style="cyan", expand=True))
 
     while True:
         user_input = prompt("Enter a command: ", completer=command_completer)
@@ -34,12 +42,12 @@ def main():
         if command in ["close", "exit"]:
             save_data(book.data, filename)
             save_data(notes.data, filenameNotes)
-            print(colored("Good bye!", 'blue'))
+            console.print(Panel(f"👋 {goodbye_message}", style="blue", expand=True))
             break
         elif command in command_dict:
             command_dict[command](args)
         else:
-            print(colored("Invalid command.", 'red'))
+            console.print(Panel(f"❌ {invalid_command_message}", style="red", expand=True))
 
 if __name__ == "__main__":
     main()
