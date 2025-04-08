@@ -2,35 +2,38 @@ from termcolor import colored
 from modules.Notes_m.record_m import Record
 from services.file_manager import save_data
 from modules.Common_m.CONSTANT import filenameNotes
+from rich.console import Console
+from rich.text import Text
 
+console=Console()
 # Function to handle command "add"
 def add_note(notes, args):
     if not args or len(args) < 1:
-        print(colored(f"Missing message", 'red'))
+        console.print(Text(f"Missing title", style='red'))
     else:
         try:
-            message = args[0]
-            tags = args[1:] if len(args) > 1 else None
+            title = args
+            # tags = args[1:] if len(args) > 1 else None
 
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
-            print(colored(f"You already have message {message} in your note", 'red'))
+            console.print(Text(f"You already have title {title} in your notes", style='red'))
         else:
-            record = Record(message)
-            try:
-                if tags:
-                    for tag in tags:
-                        record.add_tag(tag)
-            except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
+            record = Record(title)
+            # try:
+            #     if tags:
+            #         for tag in tags:
+            #             record.add_tag(tag)
+            # except ValueError as e:
+            #     print(colored(f"Error: {e}", 'red'))
 
             notes.add_record(record)
             save_data(notes.data, filenameNotes)
-            print(colored(f"Added {message} with tags {tags}.", 'green'))
+            console.print(Text(f"Added '{title}'.", 'green'))
 
 # Function to handle command "add-tag"
 def add_tag(notes, args):
@@ -82,7 +85,7 @@ def show_all_notes(notes):
     if not notes.data:
         print(colored("No notes available.", 'red'))
     else:
-        print(notes)
+        print(notes.data.values())
 
 # Function to handle command "show-message"
 def show_message(notes, args):
