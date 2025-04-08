@@ -16,7 +16,7 @@ def load_data(book, filename):
         with open(filename, "rb") as file:
             return pickle.load(file) 
     except Exception as e:
-        console.print(Panel(Text("An error occurred while loading data:", styled= 'yellow') + Text(e, style='red')))
+        console.print(Panel(Text("An error occurred while loading data:", style= 'yellow') + Text(e, style='red')))
         return book
 
 # Save contacts to a pickle file
