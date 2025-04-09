@@ -19,14 +19,25 @@ def main():
     sorted_loaded_contacts= sorted(loaded_contacts.items(), key=lambda x: x[0])
     book.data.update(sorted_loaded_contacts)
 
-    print("--- show_all_contacts ---")
+    print("--- hello ---")
+    hello(book)
+
+    print("--- all-contacts | show_all_contacts(book) ---")
     show_all_contacts(book)
 
-    print("--- add contact ---")
+    print("--- all-birthdays | birthdays_all(book) ---")
+    birthdays_all(book)
+
+    print("--- add name | add_contact(book, args) ---")
     add_contact(book, ["Name01"])
     print("--- add contact with existing name ---")
     add_contact(book, ["Name01"])
-    show_all_contacts(book)
+
+    print("--- add name phone(10num) birthday email address | add_contact(book, args) ---")
+    add_contact(book,["Name02","5551234321", "11.04.1987", "name02@mail.com","Address 02"])
+    # show_all_contacts(book)
+
+    exit()
 
     print("--- add phone ---")
     show_phone(book, ["Name01"])
@@ -112,8 +123,8 @@ def main():
     # delete_contact(book, ["Name01"])
     # show_all_contacts(book)
 
-    print("--- save data to file ---")
-    save_data(book.data, filename)
+    # print("--- save data to file ---")
+    # save_data(book.data, filename)
 
 if __name__ == "__main__":
     main()
