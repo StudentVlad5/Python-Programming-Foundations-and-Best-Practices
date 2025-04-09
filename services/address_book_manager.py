@@ -277,12 +277,12 @@ def show_address(book, args):
         name = args[0]
         record = book.find(name)
         if record:
-            if "address" in record:
-                console.print(f"[green]Address for {name}: {record['address']}[/green]")
+            if record.address is not None:
+                console.print(f"[green]Address for {name}: {record.address}[/green]")
             else:
                 console.print(f"[red]Contact {name}: doesn't have address [/red]")
-
-    console.print(f"[red]Error: {name} not found.[/red]")
+    else:
+        console.print(f"[red]Error: {name} not found.[/red]")
 
 # Function to handle command "delete"
 def delete_contact(book, args):
