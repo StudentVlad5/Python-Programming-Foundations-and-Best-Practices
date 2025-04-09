@@ -74,6 +74,28 @@ def add_contact(book, args):
         )
     )
 
+def add_name(book, args):
+    if not args or len(args) < 1:
+        console.print("[bold red]Missing name[/bold red]")
+        return
+
+    try:
+        name = args[0]
+    except Exception as e:
+        console.print(f"[bold red]Error:[/bold red] {e}")
+        return
+
+    record = book.find(name)
+    if record:
+        console.print(f"[yellow]⚠️ Contact '{name}' already exists in your book[/yellow]")
+        return
+
+    record = Record(name)
+    book.add_record(record)
+    save_data(book.data, filename)
+    show_contact(book, [name])
+
+
 # Function to handle command "add-phone"
 def add_phone(book, args):
     if not args or len(args) < 1:
