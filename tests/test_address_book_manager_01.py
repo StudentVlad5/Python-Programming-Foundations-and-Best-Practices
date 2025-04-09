@@ -39,7 +39,7 @@ def main():
 
     print("--- add-phone name phone(10num) |  add_phone(book, args) ---")
     add_phone(book, ["Name01", "5551234567"])
-    print("--- add blank phone number 1234567890123")
+    print("--- add blank phone number ---")
     add_phone(book, ["Name01", ""])
     print("--- add second phone number ---")
     add_phone(book, ["Name01", "5550000001"])
@@ -57,7 +57,7 @@ def main():
     print("--- edit phone for non-existent contact")
     edit_phone(book, ["NoName", "5551234567", "5550000022"])
     print("--- edit non-existent phone")
-    edit_phone(book, ["NoName", "0000000000", "5550000022"])
+    edit_phone(book, ["Name01", "0000000000", "5550000022"])
     print("--- wrong new phone incorrect phone number asdfghjkls")
     edit_phone(book, ["NoName", "0000000000", "asdfghjkls"])
     print("--- long new phone number 1234567890123")
