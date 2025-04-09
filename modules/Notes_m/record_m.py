@@ -1,6 +1,6 @@
+from .title_m import Title
 from .tag_m import Tag
 from .message_m import Message
-from termcolor import colored
 from rich.console import Console
 from rich.text import Text
 
@@ -15,9 +15,9 @@ class Record:
         #     self.message = None
         # self.tags = []
         try:
-            self.title = Message(title)
+            self.title = Title(title)
         except ValueError as e:
-            print(f"Error: {e}")
+            console.print(Text(f"Error: {e}", style='red'))
             self.title = None
         self.tags = []
 
@@ -44,7 +44,7 @@ class Record:
                     self.add_tag(new_tag)
                     self.delete_tag(old_tag)
                     return 1
-            raise ValueError(colored(f"Tag {old_tag} not found.", 'red'))
+            raise ValueError(Text(f"Tag {old_tag} not found.", style='red'))
         except ValueError as e:
             console.print(Text(f"Error: {e}", style='red'))
             return 0
@@ -57,7 +57,7 @@ class Record:
         else:
             tags_str = "No tags"
             
-        return f"{colored("Title: ",'cyan')} {colored(title_str, 'green')} {colored("Tags: ", 'cyan')} {colored(tags_str, 'green')}"
+        return f"{Text(f"Title: {title_str}; Tags: {tags_str}", style='cyan')}"
     # def __str__(self):
     #     message_str = self.message.value if self.message else "No message"
 

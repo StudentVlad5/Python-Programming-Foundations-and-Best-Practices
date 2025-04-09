@@ -3,6 +3,8 @@ from services.file_manager import save_data
 from modules.Common_m.CONSTANT import filenameNotes
 from rich.console import Console
 from rich.text import Text
+from rich.table import Table
+from rich import box
 
 console=Console()
 # Function to handle command "add"
@@ -84,7 +86,26 @@ def show_all_notes(notes):
     if not notes.data:
         console.print(Text("No notes available.", style='red'))
     else:
-        print(notes.data.values())
+        # print(notes.data.values())
+        table = Table(
+        title="📝 [bold cyan]Notes",
+        title_style="bold white on blue",
+        box=box.ROUNDED,
+        border_style="bright_magenta",
+        show_lines=True,
+        padding=(0, 1)
+    )
+
+    table.add_column("📂 Title", style="bold green", no_wrap=True)
+    table.add_column("🔗 Tags", style="white")
+
+    for note in notes.data.values():
+        title = f"[bold]{note.title}[/bold]" if note.title else "[dim]—[/dim]"
+        tags = ", ".join([p.value for p in note.tags]) if note.tags else "[dim]—[/dim]"
+
+        table.add_row(title, tags)
+
+    console.print(table)
 
 # Function to handle command "show-message"
 def show_message(notes, args):
