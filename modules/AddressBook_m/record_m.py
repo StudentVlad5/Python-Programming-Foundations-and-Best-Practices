@@ -22,7 +22,16 @@ class Record:
         self.emails = []
         self.birthday = None
         self.address = None
-# add phone, birthday, address and email
+# add name, phone, birthday, address and email
+    # def add_name(self, name):
+    #     try:
+    #         valid_name = Name(name) 
+    #         self.name = valid_name
+    #         return 1
+    #     except ValueError as e:
+    #         console.print(f"[red]Error: {e}[/red]")
+    #         return 0
+        
     def add_phone(self, phone):
         try:
             valid_phone = Phone(phone) 
