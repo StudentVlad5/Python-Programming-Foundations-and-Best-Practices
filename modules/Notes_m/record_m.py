@@ -48,5 +48,5 @@ class Record:
         else:
             tags_str = "No tags"
             
-        return f"{colored("Message: ",'cyan')} {colored(message_str, 'green')} {colored("Tags: ", 'cyan')} {colored(tags_str, 'green')}"
+        return f"{colored('Message: ', 'cyan')} {colored(message_str, 'green')} {colored('Tags: ', 'cyan')} {colored(tags_str, 'green')}"
 

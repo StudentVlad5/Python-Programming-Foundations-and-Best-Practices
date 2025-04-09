@@ -18,7 +18,7 @@ class Note(UserDict):
             del self.data[message]
             return 1
         else:
-            print(f"{colored("Error: Record for",'yellow')} {colored(message, 'red')} {colored("not found.", 'yellow')}")
+            print(f"{colored('Error: Record for', 'yellow')} {colored(message, 'red')} {colored('not found.', 'yellow')}")
             return 0
     
     def __str__(self):
