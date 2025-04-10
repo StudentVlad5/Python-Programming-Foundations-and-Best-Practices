@@ -1,6 +1,7 @@
 from modules.Notes_m.record_m import Record
 from services.file_manager import save_data
 from modules.Common_m.CONSTANT import filenameNotes
+from modules.Common_m.simple_editor import simple_editor
 from rich.console import Console
 from rich.text import Text
 from rich.table import Table
@@ -33,12 +34,13 @@ def add_note(notes, args):
             except ValueError as e:
                 console.print(Text(f"Error: {e}", style='red'))
 
-            print("Please enter the message for this note. To finish editing:")
-            print("Linux/macOS: Press Ctrl + D (hold down the Ctrl key and press the D key)")
-            print("Windows: Press Ctrl + Z, then press Enter.")
-            #message = input("Please enter the message for this note: ")
-            note_lines = sys.stdin.readlines()
-            message = "".join(note_lines)
+            # print("Please enter the message for this note. To finish editing:")
+            # print("Linux/macOS: Press Ctrl + D (hold down the Ctrl key and press the D key)")
+            # print("Windows: Press Ctrl + Z, then press Enter.")
+            # #message = input("Please enter the message for this note: ")
+            # note_lines = sys.stdin.readlines()
+            # message = "".join(note_lines)
+            message = simple_editor("") 
             record.message = message
 
             notes.add_record(record)
