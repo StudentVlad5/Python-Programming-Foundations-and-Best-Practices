@@ -485,3 +485,43 @@ def search_contact(book, args):
         console.print(table)
     else:
         console.print(f"[red]No messages found matching '{search_input}'.[/red]")
+        
+    
+# функція для виведення логування
+def all_logs():
+    log_filename = "log_file.txt" 
+    try:
+        with open(log_filename, "r", encoding="utf-8") as file:
+            log_lines = file.readlines()
+    except FileNotFoundError:
+        Console().print("[red]Log file not found.[/red]")
+        return
+
+    if not log_lines:
+        Console().print("[red]No logs available.[/red]")
+        return
+
+    console = Console()
+    table = Table(title="All Logs", header_style="bold green")
+    # Створимо колонки – припустимо, формат рядка: 
+    # "YYYY-MM-DD HH:MM:SS | Function: <func_name> | Args: <args>"
+    table.add_column("Timestamp", style="blue", justify="left")
+    table.add_column("Function", style="cyan", justify="left")
+    table.add_column("Arguments", style="yellow", justify="left")
+
+    for line in log_lines:
+        line = line.strip()
+        # Розділяємо рядок за роздільником " | "
+        parts = line.split(" | ")
+        if len(parts) >= 3:
+            timestamp = parts[0]
+            # Прибираємо префікс "Function: " із другого елемента
+            func_name = parts[1].replace("Function: ", "")
+            # Прибираємо префікс "Args: " із третього елемента
+            args_part = parts[2].replace("Args: ", "")
+            table.add_row(timestamp, func_name, args_part)
+        else:
+            # Якщо формат рядка інший, просто виводимо рядок у першій колонці
+            table.add_row(line, "", "")
+
+    console.print(table)
