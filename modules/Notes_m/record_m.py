@@ -8,18 +8,19 @@ console=Console()
 
 class Record:
     def __init__(self, title):
-        # try:
-        #     self.message = Message(message)
-        # except ValueError as e:
-        #     print(f"Error: {e}")
-        #     self.message = None
-        # self.tags = []
         try:
             self.title = Title(title)
         except ValueError as e:
             console.print(Text(f"Error: {e}", style='red'))
             self.title = None
+            
         self.tags = []
+        self.message = None
+
+    # def prompt_message(self):
+    #     if self.message is None:
+    #         user_input = input("Enter the message for this note: ")
+    #         self.message = user_input.strip()
 
     def add_tag(self, tag):
         try:
@@ -50,21 +51,8 @@ class Record:
             return 0
         
     def __str__(self):
-        title_str = self.title.value if self.message else "No title"
-
-        if self.tags:
-            tags_str = ", ".join([tag.value for tag in self.tags])
-        else:
-            tags_str = "No tags"
+        title_str = self.title.value if self.title else "No title"
+        tags_str = ", ".join([tag.value for tag in self.tags]) if self.tags else "No tags"
+        message_str = self.message if self.message else "No message"
             
-        return f"{Text(f"Title: {title_str}; Tags: {tags_str}", style='cyan')}"
-    # def __str__(self):
-    #     message_str = self.message.value if self.message else "No message"
-
-    #     if self.tags:
-    #         tags_str = ", ".join([tag.value for tag in self.tags])
-    #     else:
-    #         tags_str = "No tags"
-            
-    #     return f"{colored("Message: ",'cyan')} {colored(message_str, 'green')} {colored("Tags: ", 'cyan')} {colored(tags_str, 'green')}"
-
+        return f"{Text(f'Title: {title_str}; Tags: {tags_str}; Message: {message_str}', style='cyan')}"

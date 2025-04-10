@@ -32,32 +32,35 @@ def add_note(notes, args):
             except ValueError as e:
                 console.print(Text(f"Error: {e}", style='red'))
 
+            message = input("Please enter the message for this note: ")
+            record.message = message
+
             notes.add_record(record)
             save_data(notes.data, filenameNotes)
-            console.print(Text(f"Added '{title}'.", style='green'))
+            console.print(Text(f"Added '{title}' with message {message}.", style='green'))
 
 # Function to handle command "add-tag"
 def add_tag(notes, args):
     if len(args) < 2:
-        console.print(Text(f"Missing message or tag", style='red'))
+        console.print(Text(f"Missing title or tag", style='red'))
     else:
         try:
-            message = args[0]
+            title = args[0]
             tag = args[1]
         except Exception as e:
             console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
             try:
                 record.add_tag(tag)
                 save_data(notes.data, filenameNotes)
-                console.print(Text(f"Added tag '{tag}' to message '{message}'.", style='green'))
+                console.print(Text(f"Added tag '{tag}' to title '{title}'.", style='green'))
             except ValueError as e:
                 console.print(Text(f"Error: {e}", 'red'))
         else:
-            console.print(Text(f"Message '{message}' not found.", style='red'))
+            console.print(Text(f"Note with title '{title}' not found.", style='red'))
 
 # Function to handle command "delete-tag"
 def delete_tag(notes, args):
@@ -86,7 +89,6 @@ def show_all_notes(notes):
     if not notes.data:
         console.print(Text("No notes available.", style='red'))
     else:
-        # print(notes.data.values())
         table = Table(
         title="📝 [bold cyan]Notes",
         title_style="bold white on blue",
@@ -98,12 +100,14 @@ def show_all_notes(notes):
 
     table.add_column("📂 Title", style="bold green", no_wrap=True)
     table.add_column("🔗 Tags", style="white")
+    table.add_column("💡 Message", style="white")
 
     for note in notes.data.values():
         title = f"[bold]{note.title}[/bold]" if note.title else "[dim]—[/dim]"
         tags = ", ".join([p.value for p in note.tags]) if note.tags else "[dim]—[/dim]"
+        message = f"[bold]{note.message}[/bold]" if note.message else "[dim]—[/dim]"
 
-        table.add_row(title, tags)
+        table.add_row(title, tags, message)
 
     console.print(table)
 
