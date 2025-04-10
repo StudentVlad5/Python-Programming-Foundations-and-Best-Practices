@@ -101,27 +101,7 @@ def show_all_notes(notes):
     if not notes.data:
         console.print(Text("No notes available.", style='red'))
     else:
-        table = Table(
-        title="📝 [bold cyan]Notes",
-        title_style="bold white on blue",
-        box=box.ROUNDED,
-        border_style="bright_magenta",
-        show_lines=True,
-        padding=(0, 1)
-    )
-
-        table.add_column("📂 Title", style="bold green", no_wrap=True)
-        table.add_column("🔗 Tags", style="white")
-        table.add_column("💡 Message", style="white")
-
-        for note in notes.data.values():
-            title = f"[bold]{note.title}[/bold]" if note.title else "[dim]—[/dim]"
-            tags = ", ".join([p.value for p in note.tags]) if note.tags else "[dim]—[/dim]"
-            message = f"[bold]{note.message}[/bold]" if note.message else "[dim]—[/dim]"
-
-            table.add_row(title, tags, message)
-
-        console.print(table)
+        notes_print_helper(notes.data.values())
 
 # Function to handle command "show-note"
 def show_note(notes, args):
@@ -136,25 +116,7 @@ def show_note(notes, args):
 
         record = notes.find(title)
         if record:
-            table = Table(
-            title="📝 [bold cyan]Notes",
-            title_style="bold white on blue",
-            box=box.ROUNDED,
-            border_style="bright_magenta",
-            show_lines=True,
-            padding=(0, 1)
-        )
-
-            table.add_column("📂 Title", style="bold green", no_wrap=True)
-            table.add_column("🔗 Tags", style="white")
-            table.add_column("💡 Message", style="white")
-  
-            title = f"[bold]{record.title}[/bold]" if record.title else "[dim]—[/dim]"
-            tags = ", ".join([p.value for p in record.tags]) if record.tags else "[dim]—[/dim]"
-            message = f"[bold]{record.message}[/bold]" if record.message else "[dim]—[/dim]"
-
-            table.add_row(title, tags, message)
-            console.print(table)
+            notes_print_helper([record])
         else:
             console.print(Text(f"Title '{title}' not found.", style='red'))
 
@@ -231,46 +193,48 @@ def search_tag(notes, args):
                 results.append(record)
 
     if results:
-        console.print(Text("Search Results:", style='green'))
-        table = Table(
-        title="📝 [bold cyan]Notes",
-        title_style="bold white on blue",
-        box=box.ROUNDED,
-        border_style="bright_magenta",
-        show_lines=True,
-        padding=(0, 1)
-    )
-
-        table.add_column("📂 Title", style="bold green", no_wrap=True)
-        table.add_column("🔗 Tags", style="white")
-        table.add_column("💡 Message", style="white")
-
-        for result in results:
-            title = f"[bold]{result.title}[/bold]" if result.title else "[dim]—[/dim]"
-            tags = ", ".join([p.value for p in result.tags]) if result.tags else "[dim]—[/dim]"
-            message = f"[bold]{result.message}[/bold]" if result.message else "[dim]—[/dim]"
-
-            table.add_row(title, tags, message)
-        console.print(table)
+        notes_print_helper(results)
     else:
         console.print(Text(f"No tags found matching '{search_input}'.", style='red'))
 
 # Function to handle command "search-message"
 def search_message(notes, args):
     print('search')
-    # if not args:
-    #     console.print(Text("Please provide a search input.", style='red'))
-    #     return
-    # search_input = args[0].lower() 
-    # results = []
-    # for record in notes.data.values():  
-    #     if search_input in record.message.lower(): 
-    #         tags_str = " ".join(tag.value for tag in record.tags)
-    #         results.append(f"Message: {record.message} Tags: {tags_str}")
+    if not args:
+        console.print(Text("Please provide a search input.", style='red'))
+        return
+    search_input = args[0].lower() 
+    results = []
+    for record in notes.data.values():  
+        if record.message and search_input in record.message.lower(): 
+            results.append(record)
 
     if results:
-        console.print(Text("Search Results:", style='green'))
-        for result in results:
-            console.print(Text(result, style='magenta'))
+        notes_print_helper(results)
     else:
-        console.print(Text(f"No messages found matching '{search_input}'.", style='red'))
+        console.print(Text(f"No messages matching '{search_input}' found.", style='red'))
+
+# Function-helper for printing notes
+def notes_print_helper(arr):
+    print("THIS IS SPARTAAAAA1111")
+    console.print(Text("Search Results:", style='green'))
+    table = Table(
+    title="📝 [bold cyan]Notes",
+    title_style="bold white on blue",
+    box=box.ROUNDED,
+    border_style="bright_magenta",
+    show_lines=True,
+    padding=(0, 1)
+)
+
+    table.add_column("📂 Title", style="bold green", no_wrap=True)
+    table.add_column("🔗 Tags", style="white")
+    table.add_column("💡 Message", style="white")
+
+    for item in arr:
+        title = f"[bold]{item.title}[/bold]" if item.title else "[dim]—[/dim]"
+        tags = ", ".join([p.value for p in item.tags]) if item.tags else "[dim]—[/dim]"
+        message = f"[bold]{item.message}[/bold]" if item.message else "[dim]—[/dim]"
+
+        table.add_row(title, tags, message)
+    console.print(table)
