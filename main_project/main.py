@@ -1,16 +1,16 @@
-from services.file_manager import load_data, save_data
-from services.data_parse_input import parse_input
-from services.prompt_toolkit import handle_user_input
-from modules.AddressBook_m.addressbook_m import AddressBook
-from modules.Notes_m.note_m import Note
-from modules.Common_m.dictionary import command_d
+from main_project.services.file_manager import load_data, save_data
+from main_project.services.data_parse_input import parse_input
+from main_project.services.prompt_toolkit import handle_user_input
+from main_project.modules.AddressBook_m.addressbook_m import AddressBook
+from main_project.modules.Notes_m.note_m import Note
+from main_project.modules.Common_m.dictionary import command_d
+from main_project.modules.Common_m.CONSTANT import filename, filenameNotes
+from main_project.modules.Common_m.dictionary import command_list
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from rich.text import Text
 from rich.panel import Panel
 from rich.console import Console
-from modules.Common_m.CONSTANT import filename, filenameNotes
-from modules.Common_m.dictionary import command_list
 
 console = Console()
 welcome_message = Text("[bold cyan]Welcome to the assistant bot![/bold cyan]")
