@@ -11,7 +11,6 @@ def help():
     table.add_column("Description", style="green")
 
     # Address Book Commands
-    table.add_row("Address Book", "hello", "Greet the user")
     table.add_row("Address Book", "all-contacts", "Show all contacts")
     table.add_row("Address Book", "all-birthdays", "Show all birthdays")
     table.add_row("Address Book", "add", "Add full contact: name phone birthday email address")
@@ -51,6 +50,7 @@ def help():
     # Logs & System Commands
     table.add_row("Logs", "all-logs", "Show all command logs")
     table.add_row("Logs", "logs-by-date", "Show logs by date: YYYY-MM-DD")
+    table.add_row("System", "hello", "Greet the user")
     table.add_row("System", "exit", "Exit the application")
     table.add_row("System", "close", "Exit the application (alternative)")
 
