@@ -1,22 +1,33 @@
+from .title_m import Title
 from .tag_m import Tag
 from .message_m import Message
-from termcolor import colored
+from rich.console import Console
+from rich.text import Text
+
+console=Console()
 
 class Record:
-    def __init__(self, message):
+    def __init__(self, title):
         try:
-            self.message = Message(message)
+            self.title = Title(title)
         except ValueError as e:
-            print(f"Error: {e}")
-            self.message = None
+            console.print(Text(f"Error: {e}", style='red'))
+            self.title = None
+            
         self.tags = []
+        self.message = None
+
+    # def prompt_message(self):
+    #     if self.message is None:
+    #         user_input = input("Enter the message for this note: ")
+    #         self.message = user_input.strip()
 
     def add_tag(self, tag):
         try:
             self.tags.append(Tag(tag))
             return 1
         except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return 0
 
     def delete_tag(self, tag):
@@ -24,7 +35,7 @@ class Record:
             self.tags = [t for t in self.tags if t.value != tag]
             return 1
         except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return 0
 
     def edit_tag(self, old_tag, new_tag):
@@ -34,19 +45,14 @@ class Record:
                     self.add_tag(new_tag)
                     self.delete_tag(old_tag)
                     return 1
-            raise ValueError(colored(f"Tag {old_tag} not found.", 'red'))
+            raise ValueError(Text(f"Tag {old_tag} not found.", style='red'))
         except ValueError as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return 0
-
-
+        
     def __str__(self):
-        message_str = self.message.value if self.message else "No message"
-
-        if self.tags:
-            tags_str = ", ".join([tag.value for tag in self.tags])
-        else:
-            tags_str = "No tags"
+        title_str = self.title.value if self.title else "No title"
+        tags_str = ", ".join([tag.value for tag in self.tags]) if self.tags else "No tags"
+        message_str = self.message if self.message else "No message"
             
-        return f"{colored("Message: ",'cyan')} {colored(message_str, 'green')} {colored("Tags: ", 'cyan')} {colored(tags_str, 'green')}"
-
+        return f"{Text(f'Title: {title_str}; Tags: {tags_str}; Message: {message_str}', style='cyan')}"
