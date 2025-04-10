@@ -61,14 +61,16 @@ Akso implemented a decorator for logging user commands.
 
 ### AddressBook Commands
 
-- `hello` – Greet the user.
+
 - `all-contacts` – Display all contacts in the address book.
 - `all-birthdays` – Display all birthdays in the address book.
+- `add-name` – Add only the name for a new contact.
 - `add` – Add a new contact with full details (name, phone, email, birthday, address).
 - `add-phone` – Add a phone number to an existing contact.
 - `add-email` – Add an email to an existing contact.
 - `add-birthday` – Add a birthday to a contact.
 - `add-address` – Add an address to a contact.
+- `contact` – Show complete contact information.
 - `phone` – View a contact's phone number.
 - `email` – View a contact's email address.
 - `address` – View a contact's address.
@@ -77,6 +79,7 @@ Akso implemented a decorator for logging user commands.
 - `edit-*` – Edit specific contact details (address, birthday, email, phone).
 - `delete` – Delete a contact.
 - `delete-*` – Delete specific contact details (address, birthday, email, phone).
+- `search-contact` – Search for a contact by name.
 
 ### Notes Commands
 
@@ -92,6 +95,9 @@ Akso implemented a decorator for logging user commands.
 
 ### Other Commands
 
+- `hello` – Greet the user.
+- `all-logs` – Show the entire command logs history.
+- `logs-by-date` – Show logs for a specific date.
 - `exit` or `close` – Close the application.
 
 ---
@@ -139,19 +145,20 @@ your_project_folder/
 │   ├── Notes_m/
 │   └── Common_m/
 ├── requirements.txt         # List of dependencies
+├── cli.py                   # Utils for testing
 ├── .gitignore               # Git ignore file
 ├── log_file.txt             # Logs of user's commands
 ├── addressbook.pkl          # Data of address contacts
 ├── notes.pkl                # Data of notes
 └── README.md                # Project documentation
+```
 
-Contributing
+### Contributing
 Feel free to fork the repository and submit a pull request. Before making changes, please:
 
 Run any existing tests to ensure everything works as expected.
 
 Write tests for any new features or fixes.
 
-License
+### License
 This project is licensed under the MIT License. See the LICENSE file for more details.
-
