@@ -3,8 +3,6 @@
 import sys
 import os
 import pytest
-from io import StringIO
-from unittest.mock import patch
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
