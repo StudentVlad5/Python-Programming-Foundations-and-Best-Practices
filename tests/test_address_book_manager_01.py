@@ -85,14 +85,10 @@ def main():
     add_email(book,["Name01","name01@mail.com"])
     print("--- add another email ---")
     add_email(book,["Name01","name01two@mail.com"])
-    print("--- add add email to non existent contact ---")
+    print("--- add email to non existent contact ---")
     add_email(book,["NoName","name01two@mail.com"])
 
-    #exit()
-
-
-
-
+    print("--- edit email ---")
     edit_email(book,["Name01", "name01two@mail.com","name01@mail-two.com"])
     show_email(book, ["Name01"])
     print("--- delete email ---")
