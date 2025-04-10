@@ -5,6 +5,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.table import Table
 from rich import box
+import sys
 
 console=Console()
 # Function to handle command "add"
@@ -32,7 +33,12 @@ def add_note(notes, args):
             except ValueError as e:
                 console.print(Text(f"Error: {e}", style='red'))
 
-            message = input("Please enter the message for this note: ")
+            print("Please enter the message for this note. To finish editing:")
+            print("Linux/macOS: Press Ctrl + D (hold down the Ctrl key and press the D key)")
+            print("Windows: Press Ctrl + Z, then press Enter.")
+            #message = input("Please enter the message for this note: ")
+            note_lines = sys.stdin.readlines()
+            message = "".join(note_lines)
             record.message = message
 
             notes.add_record(record)
