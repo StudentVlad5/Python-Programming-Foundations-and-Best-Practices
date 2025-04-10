@@ -7,20 +7,15 @@ from rich.text import Text
 console=Console()
 
 class Record:
-    def __init__(self, title):
+    def __init__(self, title, tags=None, message=None):
         try:
             self.title = Title(title)
         except ValueError as e:
             console.print(Text(f"Error: {e}", style='red'))
             self.title = None
             
-        self.tags = []
-        self.message = None
-
-    # def prompt_message(self):
-    #     if self.message is None:
-    #         user_input = input("Enter the message for this note: ")
-    #         self.message = user_input.strip()
+        self.tags = tags if tags is not None else [] 
+        self.message = message
 
     def add_tag(self, tag):
         try:
