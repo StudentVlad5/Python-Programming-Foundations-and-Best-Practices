@@ -1,0 +1,5 @@
+timestamp,command,parameters,result
+2025-04-10 12:45:01,add,"name=John, phone=1234567890",Контакт додано
+2025-04-10 12:45:01,delete,name=John,Контакт видалено
+2025-04-10 12:45:01,add,"name=Jane, phone=0987654321",Контакт додано
+2025-04-10 12:45:01,update,"name=Jane, email=jane@example.com",Контакт оновлено
