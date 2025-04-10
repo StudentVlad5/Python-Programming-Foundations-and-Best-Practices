@@ -1,6 +1,5 @@
-from .title_m import Title
-from .tag_m import Tag
-from .message_m import Message
+from main_project.modules.Notes_m.title_m import Title
+from main_project.modules.Notes_m.tag_m import Tag
 from rich.console import Console
 from rich.text import Text
 

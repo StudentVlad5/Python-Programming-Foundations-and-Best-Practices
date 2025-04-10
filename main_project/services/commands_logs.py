@@ -2,7 +2,7 @@ from functools import wraps
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
-from modules.Common_m.CONSTANT import log_filename
+from main_project.modules.Common_m.CONSTANT import log_filename
 
 console = Console()
 

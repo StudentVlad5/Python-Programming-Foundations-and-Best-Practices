@@ -1,5 +1,5 @@
+from main_project.services.errors_wrap import input_error
 from collections import UserDict
-from services.errors_wrap import input_error
 from datetime import datetime, timedelta
 from rich.text import Text
 from rich.console import Console
