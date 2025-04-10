@@ -101,6 +101,7 @@ def command_d_keys(book=None, notes=None):
 
 command_list = [
     "hello",
+    #  addressBook commands
     "all-contacts",
     "all-birthdays",
     "add name phone(10num) birthday email address",
@@ -125,6 +126,7 @@ command_list = [
     "delete-email name email",
     "delete-phone name phone",
     "search-contact name",
+    # notes command
     "all-notes",
     "add-note title tags",
     "add-tag title tag",
@@ -132,8 +134,9 @@ command_list = [
     "edit-title title new_title",
     "search-tag search_text",
     "search-message search_text",
-    "delete-note message",
-    "delete-tag message tag",
+    "delete-note title",
+    "delete-tag title tag",
+    # other commands
     "all-logs",
     "logs-by-date date (YYYY-MM-DD)",
     "close", 
