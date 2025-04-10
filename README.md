@@ -96,6 +96,7 @@ Akso implemented a decorator for logging user commands.
 ### Other Commands
 
 - `hello` – Greet the user.
+- `help` – Show all list of the commands.
 - `all-logs` – Show the entire command logs history.
 - `logs-by-date` – Show logs for a specific date.
 - `exit` or `close` – Close the application.
