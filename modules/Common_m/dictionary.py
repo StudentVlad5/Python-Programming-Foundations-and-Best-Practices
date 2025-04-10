@@ -1,5 +1,5 @@
 from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact, add_email, show_email, add_address, show_address, birthdays_all, birthdays, edit_address, edit_birthday, edit_email, edit_phone, delete_address, delete_birthday, delete_email, delete_phone, show_contact, search_contact, add_name
-from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_message, edit_message, delete_note, search_tag, search_message
+from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_note, edit_title, delete_note, search_tag, search_message
 
 def command_d(book, notes):
     command_d = {
@@ -31,11 +31,11 @@ def command_d(book, notes):
             "search-contact": lambda args: search_contact(book, args),
             
         #  notes commands
-            "all-note": lambda _: show_all_notes(notes),
+            "all-notes": lambda _: show_all_notes(notes),
             "add-note": lambda args: add_note(notes, args),
             "add-tag": lambda args: add_tag(notes, args),
-            "show-message": lambda args: show_message(notes, args),
-            "edit-message": lambda args: edit_message(notes, args),
+            "show-note": lambda args: show_note(notes, args),
+            "edit-title": lambda args: edit_title(notes, args),
             "search-tag": lambda args: search_tag(notes, args),
             "search-message": lambda args: search_message(notes, args),
             "delete-note": lambda args: delete_note(notes, args),
@@ -74,11 +74,11 @@ def command_d_keys(book=None, notes=None):
             "delete-phone": lambda args: delete_phone(book, args),
             
         #  notes commands
-            "all-note": lambda _: show_all_notes(notes),
+            "all-notes": lambda _: show_all_notes(notes),
             "add-note": lambda args: add_note(notes, args),
             "add-tag": lambda args: add_tag(notes, args),
-            "show-message": lambda args: show_message(notes, args),
-            "edit-message": lambda args: edit_message(notes, args),
+            "show-note": lambda args: show_note(notes, args),
+            "edit-title": lambda args: edit_title(notes, args),
             "search-tag": lambda args: search_tag(notes, args),
             "search-message": lambda args: search_message(notes, args),
             "delete-note": lambda args: delete_note(notes, args),
@@ -119,11 +119,11 @@ command_list = [
     "delete-email name email",
     "delete-phone name phone",
     "search-contact name",
-    "all-note",
-    "add-note message tags",
-    "add-tag message tag",
-    "show-message message",
-    "edit-message message new_message",
+    "all-notes",
+    "add-note title tags",
+    "add-tag title tag",
+    "show-note title",
+    "edit-title title new_title",
     "search-tag search_text",
     "search-message search_text",
     "delete-note message",

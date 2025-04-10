@@ -80,11 +80,11 @@ Akso implemented a decorator for logging user commands.
 
 ### Notes Commands
 
-- `all-note` – Show all notes.
+- `all-notes` – Show all notes.
 - `add-note` – Add a new note with a message and optional tags.
 - `add-tag` – Add a tag to a note.
-- `show-message` – Display a note based on its message content.
-- `edit-message` – Edit the message of a note.
+- `show-note` – Display a note based on its message content.
+- `edit-title` – Edit the title of a note.
 - `search-tag` – Search notes by tags.
 - `search-message` – Search notes by message content.
 - `delete-note` – Delete a note.

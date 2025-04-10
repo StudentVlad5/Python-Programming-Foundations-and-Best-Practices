@@ -1,158 +1,220 @@
-from termcolor import colored
 from modules.Notes_m.record_m import Record
 from services.file_manager import save_data
 from modules.Common_m.CONSTANT import filenameNotes
+from rich.console import Console
+from rich.text import Text
+from rich.table import Table
+from rich import box
 
+console=Console()
 # Function to handle command "add"
 def add_note(notes, args):
     if not args or len(args) < 1:
-        print(colored(f"Missing message", 'red'))
+        console.print(Text(f"Missing title", style='red'))
     else:
         try:
-            message = args[0]
+            title = args[0]
             tags = args[1:] if len(args) > 1 else None
 
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
-            print(colored(f"You already have message {message} in your note", 'red'))
+            console.print(Text(f"You already have title {title} in your notes", style='red'))
         else:
-            record = Record(message)
+            record = Record(title)
             try:
                 if tags:
                     for tag in tags:
                         record.add_tag(tag)
             except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
+                console.print(Text(f"Error: {e}", style='red'))
+
+            message = input("Please enter the message for this note: ")
+            record.message = message
 
             notes.add_record(record)
             save_data(notes.data, filenameNotes)
-            print(colored(f"Added {message} with tags {tags}.", 'green'))
+            show_note(notes, [title])
+            console.print(Text(f"Added '{title}' with message {message}.", style='green'))
 
 # Function to handle command "add-tag"
 def add_tag(notes, args):
     if len(args) < 2:
-        print(colored(f"Missing message or tag", 'red'))
+        console.print(Text(f"Missing title or tag", style='red'))
     else:
         try:
-            message = args[0]
-            tag = args[1]
+            title = args[0]
+            tags = args[1:] if len(args) > 1 else None
+
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
             try:
-                record.add_tag(tag)
+                if tags:
+                    for tag in tags:
+                        record.add_tag(tag)
                 save_data(notes.data, filenameNotes)
-                print(colored(f"Added tag '{tag}' to message '{message}'.", 'green'))
+                show_note(notes, [title])
+                console.print(Text(f"Added tag '{tags}' to title '{title}'.", style='green'))
             except ValueError as e:
-                print(colored(f"Error: {e}", 'red'))
+                console.print(Text(f"Error: {e}", 'red'))
         else:
-            print(colored(f"Message '{message}' not found.", 'red'))
+            console.print(Text(f"Note with title '{title}' not found.", style='red'))
 
 # Function to handle command "delete-tag"
 def delete_tag(notes, args):
     if len(args) < 2:
-        print(colored(f"Missing message or tag", 'red'))
+        console.print(Text(f"Missing message or tag", style='red'))
     else:
         try:
             message = args[0]
             tag = args[1]
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
         record = notes.find(message)
         if record:
             if record.delete_tag(tag):
                 save_data(notes.data, filenameNotes)
-                print(colored(f"Deleted tag '{tag}' from message '{message}'.", 'green'))
+                show_note(notes, [message])
+                console.print(Text(f"Deleted tag '{tag}' from message '{message}'.", style='green'))
             else:
-                print(colored(f"Tag '{tag}' not found in message '{message}'.", 'red'))
+                console.print(Text(f"Tag '{tag}' not found in message '{message}'.", style='red'))
         else:
-            print(colored(f"Message '{message}' not found.", 'red'))
+            console.print(Text(f"Message '{message}' not found.", style='red'))
 
 # Function to handle command "all"
 def show_all_notes(notes):
     if not notes.data:
-        print(colored("No notes available.", 'red'))
+        console.print(Text("No notes available.", style='red'))
     else:
-        print(notes)
+        table = Table(
+        title="📝 [bold cyan]Notes",
+        title_style="bold white on blue",
+        box=box.ROUNDED,
+        border_style="bright_magenta",
+        show_lines=True,
+        padding=(0, 1)
+    )
 
-# Function to handle command "show-message"
-def show_message(notes, args):
+        table.add_column("📂 Title", style="bold green", no_wrap=True)
+        table.add_column("🔗 Tags", style="white")
+        table.add_column("💡 Message", style="white")
+
+        for note in notes.data.values():
+            title = f"[bold]{note.title}[/bold]" if note.title else "[dim]—[/dim]"
+            tags = ", ".join([p.value for p in note.tags]) if note.tags else "[dim]—[/dim]"
+            message = f"[bold]{note.message}[/bold]" if note.message else "[dim]—[/dim]"
+
+            table.add_row(title, tags, message)
+
+        console.print(table)
+
+# Function to handle command "show-note"
+def show_note(notes, args):
     if len(args) < 1:
-        print(colored(f"Missing message", 'red'))
+        console.print(Text(f"Missing message", style='red'))
     else:
         try:
-            message = args[0]
+            title = args[0]
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
-            print(record)
-        else:
-            print(colored(f"Message '{message}' not found.", 'red'))
+            table = Table(
+            title="📝 [bold cyan]Notes",
+            title_style="bold white on blue",
+            box=box.ROUNDED,
+            border_style="bright_magenta",
+            show_lines=True,
+            padding=(0, 1)
+        )
 
-# Function to handle command "edit-message"
-def edit_message(notes, args):
+            table.add_column("📂 Title", style="bold green", no_wrap=True)
+            table.add_column("🔗 Tags", style="white")
+            table.add_column("💡 Message", style="white")
+  
+            title = f"[bold]{record.title}[/bold]" if record.title else "[dim]—[/dim]"
+            tags = ", ".join([p.value for p in record.tags]) if record.tags else "[dim]—[/dim]"
+            message = f"[bold]{record.message}[/bold]" if record.message else "[dim]—[/dim]"
+
+            table.add_row(title, tags, message)
+            console.print(table)
+        else:
+            console.print(Text(f"Title '{title}' not found.", style='red'))
+
+# Function to handle command "edit-title"
+def edit_title(notes, args):
     if len(args) < 2:
-        print(colored(f"Missing message or new content", 'red'))
+        console.print(Text(f"Missing title or new content", style='red'))
     else:
         try:
-            message = args[0]
-            new_message = args[1]
+            title = args[0]
+            new_title = args[1]
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
-        new_record = notes.find(new_message)
+        new_record = notes.find(new_title)
         if new_record:
-            print(colored(f"New message already exsist.", 'red'))
+            console.print(Text(f"New title already exsist.", style='red'))
             return
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
-            tags_str = ", ".join(tag.value for tag in record.tags)  
-            if tags_str:
-                print(new_message + ', ' + tags_str)
-                add_note(notes, (new_message, tags_str))
-                delete_note(notes, [message])
-                save_data(notes.data, filenameNotes)
-                print(colored(f"Message '{message}' updated to '{new_message}'.", 'green'))
+            new_note = Record(title=new_title, message=record.message, tags=[*record.tags])
+            print(new_note)
+            notes.add_record(new_note)
+            save_data(notes.data, filenameNotes)
+            show_note(notes,[new_title])
+            console.print(Text(f"Note '{title}' updated to '{new_title}'.", style='green'))
         else:
-            print(colored(f"Error: Message format is incorrect for '{message}'.", 'red'))
+            console.print(Text(f"Error: Note format is incorrect for '{title}'.", style='red'))
 
-# Function to handle command "delete_note"
-def delete_note(notes, args):
+# Function to handle command "delete_tag"
+def delete_tag(notes, args):
     if len(args) < 1:
-        print(colored(f"Missing message", 'red'))
+        console.print(Text(f"Missing message", style='red'))
     else:
         try:
-            message = args[0]
+            title = args[0]
         except Exception as e:
-            print(colored(f"Error: {e}", 'red'))
+            console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
 
             for tag in record.tags:
-                print(colored(f"Deleting tag: {tag.value}", 'yellow'))  
+                console.print(Text(f"Deleting tag: {tag.value}", style='yellow'))  
                 record.delete_tag(tag.value)  
-            if notes.delete(message):
+            if notes.delete(title):
                 save_data(notes.data, filenameNotes)
-                print(colored(f"Deleted message '{message}' and its associated tags.", 'green'))
+                console.print(Text(f"Deleted title '{title}' and its associated tags.", style='green'))
             else:
-                print(colored(f"Message '{message}' could not be deleted.", 'red'))
+                console.print(Text(f"Title '{title}' could not be deleted.", style='red'))
         else:
-            print(colored(f"Message '{message}' not found.", 'red'))
-
+            console.print(Text(f"Title '{title}' not found.", style='red'))
+    
+# Function to handle command "delete"
+def delete_note(notes, args):
+    if len(args) == 1:
+        title = args[0]
+        if notes.delete(title):
+            console.print(f"[green]Deleted note {title}.[/green]")
+            save_data(notes.data, filenameNotes)
+        else:
+            console.print(f"[red]Error: {title} not found.[/red]")
+    else:
+        console.print("[red]Error: Please provide a valid title.[/red]")
+  
 # Function to handle command "search-tag"
 def search_tag(notes, args):
     search_input = args[0].lower()
@@ -163,27 +225,27 @@ def search_tag(notes, args):
                 results.append(f"Message: {record.message} Tags: {tag.value}")
 
     if results:
-        print(colored("Search Results:", 'green'))
+        console.print(Text("Search Results:", style='green'))
         for result in results:
-            print(colored(result, 'magenta'))
+            console.print(Text(result, style='magenta'))
     else:
-        print(colored(f"No tags found matching '{search_input}'.", 'red'))
+        console.print(Text(f"No tags found matching '{search_input}'.", style='red'))
 
 # Function to handle command "search-message"
 def search_message(notes, args):
     if not args:
-        print(colored("Please provide a search input.", 'red'))
+        console.print(Text("Please provide a search input.", style='red'))
         return
     search_input = args[0].lower() 
     results = []
     for record in notes.data.values():  
-        if search_input in record.message.value.lower():   
+        if search_input in record.message.lower(): 
             tags_str = " ".join(tag.value for tag in record.tags)
             results.append(f"Message: {record.message} Tags: {tags_str}")
 
     if results:
-        print(colored("Search Results:", 'green'))
+        console.print(Text("Search Results:", style='green'))
         for result in results:
-            print(colored(result, 'magenta'))
+            console.print(Text(result, style='magenta'))
     else:
-        print(colored(f"No messages found matching '{search_input}'.", 'red'))
+        console.print(Text(f"No messages found matching '{search_input}'.", style='red'))

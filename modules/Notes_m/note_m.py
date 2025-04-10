@@ -1,24 +1,26 @@
 from collections import UserDict
-from termcolor import colored
+from rich.console import Console
+from rich.text import Text
 
+console=Console()
 class Note(UserDict):
     def add_record(self, record):
-        if record.message is None:
-            print(colored(f"Cannot add a record with an invalid message.", 'red'))
+        if record.title is None:
+            console.print(Text(f"Cannot add a record with no title.", style='red'))
             return
-        self.data[record.message.value] = record
+        self.data[record.title.value] = record
 
-    def find(self, message):
-        if message in self.data:
-            return self.data[message]
+    def find(self, title):
+        if title in self.data:
+            return self.data[title]
         return None
 
-    def delete(self, message):
-        if message in self.data:
-            del self.data[message]
+    def delete(self, title):
+        if title in self.data:
+            del self.data[title]
             return 1
         else:
-            print(f"{colored("Error: Record for",'yellow')} {colored(message, 'red')} {colored("not found.", 'yellow')}")
+            console.print(Text(f"Error: Record for {title} not found.", style='red'))
             return 0
     
     def __str__(self):
