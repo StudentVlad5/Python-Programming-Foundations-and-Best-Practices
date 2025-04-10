@@ -1,10 +1,12 @@
 from services.address_book_manager import hello, add_contact, add_phone, add_birthday, show_all_contacts, show_phone, show_birthday, delete_contact, add_email, show_email, add_address, show_address, birthdays_all, birthdays, edit_address, edit_birthday, edit_email, edit_phone, delete_address, delete_birthday, delete_email, delete_phone, show_contact, search_contact, add_name
 from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_note, edit_title, delete_note, search_tag, search_message
 from services.commands_logs import all_logs, logs_by_date
+from services.help_manager import help
 
 def command_d(book, notes):
     command_d = {
             "hello": hello,
+            "help": lambda _: help(),
         #  addressBook commands
             "all-contacts": lambda _: show_all_contacts(book),
             "all-birthdays": lambda _: birthdays_all(book),
@@ -90,6 +92,7 @@ def command_d_keys(book=None, notes=None):
         # other
             "all-logs": lambda _: all_logs(),
             "logs-by-date": lambda date: logs_by_date(date),
+            "help": lambda _: help(),
             "exit": None,
             "close": None
 
@@ -139,6 +142,7 @@ command_list = [
     # other commands
     "all-logs",
     "logs-by-date date (YYYY-MM-DD)",
+    "help",
     "close", 
     "exit"
 ]
