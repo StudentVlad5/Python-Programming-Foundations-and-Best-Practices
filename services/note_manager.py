@@ -140,6 +140,7 @@ def edit_title(notes, args):
             new_note = Record(title=new_title, message=record.message, tags=[*record.tags])
             print(new_note)
             notes.add_record(new_note)
+            notes.delete(title)
             save_data(notes.data, filenameNotes)
             show_note(notes,[new_title])
             console.print(Text(f"Note '{title}' updated to '{new_title}'.", style='green'))
@@ -216,7 +217,6 @@ def search_message(notes, args):
 
 # Function-helper for printing notes
 def notes_print_helper(arr):
-    print("THIS IS SPARTAAAAA1111")
     console.print(Text("Search Results:", style='green'))
     table = Table(
     title="📝 [bold cyan]Notes",
