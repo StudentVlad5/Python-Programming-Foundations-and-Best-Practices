@@ -64,10 +64,13 @@ def add_tag(notes, args):
             try:
                 if tags:
                     for tag in tags:
-                        record.add_tag(tag)
-                save_data(notes.data, filenameNotes)
-                show_note(notes, [title])
-                console.print(Text(f"Added tag '{tags}' to title '{title}'.", style='green'))
+                        if record.add_tag(tag):
+                           record.add_tag(tag)
+                           save_data(notes.data, filenameNotes)
+                           console.print(Text(f"Added tags: '{', '.join(tags)}' to title '{title}'.", style='green'))
+                        else:
+                            console.print(Text(f"Tag '{tag}' already exists under the title '{title}'.", style='red'))
+                        show_note(notes, [title])
             except ValueError as e:
                 console.print(Text(f"Error: {e}", 'red'))
         else:
@@ -76,25 +79,25 @@ def add_tag(notes, args):
 # Function to handle command "delete-tag"
 def delete_tag(notes, args):
     if len(args) < 2:
-        console.print(Text(f"Missing message or tag", style='red'))
+        console.print(Text(f"Missing note title or tag", style='red'))
     else:
         try:
-            message = args[0]
+            title = args[0]
             tag = args[1]
         except Exception as e:
             console.print(Text(f"Error: {e}", style='red'))
             return
 
-        record = notes.find(message)
+        record = notes.find(title)
         if record:
             if record.delete_tag(tag):
                 save_data(notes.data, filenameNotes)
-                show_note(notes, [message])
-                console.print(Text(f"Deleted tag '{tag}' from message '{message}'.", style='green'))
+                show_note(notes, [title])
+                console.print(Text(f"Deleted tag '{tag}' from title '{title}'.", style='green'))
             else:
-                console.print(Text(f"Tag '{tag}' not found in message '{message}'.", style='red'))
+                console.print(Text(f"Tag '{tag}' not found under the title '{title}'.", style='red'))
         else:
-            console.print(Text(f"Message '{message}' not found.", style='red'))
+            console.print(Text(f"Title '{title}' not found.", style='red'))
 
 # Function to handle command "all"
 def show_all_notes(notes):
@@ -146,31 +149,6 @@ def edit_title(notes, args):
             console.print(Text(f"Note '{title}' updated to '{new_title}'.", style='green'))
         else:
             console.print(Text(f"Error: Note format is incorrect for '{title}'.", style='red'))
-
-# Function to handle command "delete_tag"
-def delete_tag(notes, args):
-    if len(args) < 1:
-        console.print(Text(f"Missing message", style='red'))
-    else:
-        try:
-            title = args[0]
-        except Exception as e:
-            console.print(Text(f"Error: {e}", style='red'))
-            return
-
-        record = notes.find(title)
-        if record:
-
-            for tag in record.tags:
-                console.print(Text(f"Deleting tag: {tag.value}", style='yellow'))  
-                record.delete_tag(tag.value)  
-            if notes.delete(title):
-                save_data(notes.data, filenameNotes)
-                console.print(Text(f"Deleted title '{title}' and its associated tags.", style='green'))
-            else:
-                console.print(Text(f"Title '{title}' could not be deleted.", style='red'))
-        else:
-            console.print(Text(f"Title '{title}' not found.", style='red'))
     
 # Function to handle command "delete"
 def delete_note(notes, args):

@@ -18,11 +18,30 @@ class Record:
 
     def add_tag(self, tag):
         try:
-            self.tags.append(Tag(tag))
-            return 1
+            tag_obj = Tag(tag)
+            new_tag_value = tag_obj.value.lower()
+
+            if any(t.value.lower() == new_tag_value for t in self.tags):
+                return 0
+            else:
+                self.tags.append(tag_obj)
+                return 1
         except ValueError as e:
             console.print(Text(f"Error: {e}", style='red'))
             return 0
+
+    # def add_tag(self, tag):
+    #     try:
+    #         print(tag in self.tags)
+    #         if tag in self.tags:
+    #             console.print(Text(f"Tag '{tag}' already exists under the title '{self.title}", style='red'))
+    #             return 0
+    #         else:
+    #             self.tags.append(Tag(tag))
+    #             return 1
+    #     except ValueError as e:
+    #         console.print(Text(f"Error: {e}", style='red'))
+    #         return 0
 
     def delete_tag(self, tag):
         try: 
