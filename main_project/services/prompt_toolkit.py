@@ -1,5 +1,5 @@
-from modules.Common_m.dictionary import command_d_keys
-from services.commands_logs import log_request
+from main_project.modules.Common_m.dictionary import command_d_keys
+from main_project.services.commands_logs import log_request
 from rich.console import Console
 from rich.text import Text
 

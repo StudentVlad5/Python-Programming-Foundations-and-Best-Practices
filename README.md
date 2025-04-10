@@ -54,6 +54,11 @@ Akso implemented a decorator for logging user commands.
 1. **Run the Program**:
 
     ```bash
+    python main-project
+    ```
+    or 
+    
+    ```bash
     python main.py
     ```
 

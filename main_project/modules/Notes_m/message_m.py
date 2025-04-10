@@ -1,4 +1,4 @@
-from ..Common_m.field import Field
+from main_project.modules.Common_m.field import Field
 from rich.text import Text
 
 class Message(Field):

@@ -1,4 +1,4 @@
-from ..Common_m.field import Field
+from main_project.modules.Common_m.field import Field
 import re
 from rich.text import Text
 
