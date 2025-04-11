@@ -11,7 +11,11 @@ def log_request(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        log_msg = f"{timestamp} | Function: {func.__name__} | Args: {args} \n"
+        if func.__name__ == "handle_user_input" and args:
+            command_str = args[0].split()[0]
+        else:
+            command_str = func.__name__
+        log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
         with open(log_filename, "a", encoding="utf-8") as log_file:
             log_file.write(log_msg)
         
@@ -98,4 +102,59 @@ def logs_by_date(args):
         else:
             table.add_row(line, "", "")
 
+    console.print(table)
+    
+def stats_by_date(args):
+    """
+    Виводить статистику виконання команд за задану дату.
+    Перший елемент args має містити дату у форматі "YYYY-MM-DD".
+    """
+    if not args:
+        console.print("[red]Missing date argument.[/red]")
+        return
+
+    date_str = args[0]
+    # Перевірка формату дати
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        console.print("[red]Invalid date format. Use YYYY-MM-DD.[/red]")
+        return
+
+    # Зчитуємо всі рядки з лог-файлу
+    try:
+        with open(log_filename, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+    except FileNotFoundError:
+        console.print("[red]Log file not found.[/red]")
+        return
+
+    # Відбираємо рядки, де timestamp починається з заданої дати
+    matched_lines = [line.strip() for line in lines if line.startswith(date_str)]
+    if not matched_lines:
+        console.print(f"[yellow]No logs found for date: {date_str}[/yellow]")
+        return
+
+    # Підраховуємо статистику виконання команд
+    stats = {}
+    for line in matched_lines:
+        parts = line.split(" | ")
+        if len(parts) >= 2:
+            command_logged = parts[1].strip()
+            # Обробка обох варіантів префікса
+            if command_logged.startswith("Command: "):
+                command_logged = command_logged.replace("Command: ", "").strip()
+            elif command_logged.startswith("Function: "):
+                command_logged = command_logged.replace("Function: ", "").strip()
+            # Беремо тільки перше слово як назву команди
+            command_name = command_logged.split()[0]
+            stats[command_name] = stats.get(command_name, 0) + 1
+
+    # Створюємо таблицю для виведення статистики
+    table = Table(title=f"Statistics for {date_str}", header_style="bold green")
+    table.add_column("Command", justify="left", style="cyan", no_wrap=True)
+    table.add_column("Count", justify="right", style="magenta")
+    for command, count in stats.items():
+        table.add_row(command, str(count))
+    
     console.print(table)

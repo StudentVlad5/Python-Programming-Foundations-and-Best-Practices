@@ -33,6 +33,7 @@ def main():
     console.print(Panel(f"🤖 {welcome_message}", style="cyan", expand=True))
 
     while True:
+        user_input = input("Enter a command: ").strip()
         user_input = prompt("Enter a command: ", completer=command_completer)
         handle_user_input(user_input)
         if user_input is None:
