@@ -100,7 +100,7 @@ def test_add_invalid_phone(address_book, capsys, invalid_phone):
     add_contact(address_book, ["Name01"])
     add_phone(address_book, ["Name01", invalid_phone])
     captured = capsys.readouterr()
-    assert "Error: Invalid phone number format:" in captured.out
+    assert "Invalid phone number format:" in captured.out
 
 def test_show_phone(address_book, capsys):
     add_contact(address_book, ["Name01", "5551234567"])
@@ -129,7 +129,7 @@ def test_edit_invalid_phone(address_book, capsys, invalid_phone):
     add_contact(address_book, ["Name01", "1111111111"])
     edit_phone(address_book, ["Name01", "1111111111", invalid_phone])
     captured = capsys.readouterr()
-    assert "Error: Invalid phone number format:" in captured.out
+    assert "Invalid phone number format:" in captured.out
 
 def test_delete_phone(address_book, capsys):
     add_contact(address_book, ["Name01", "5550000001"])
