@@ -62,13 +62,25 @@ def add_contact(book, args):
     book.add_record(record)
     save_data(book.data, filename)
 
+    saved_phone = str(record.phones[0]) if record.phones else None
+    saved_email = str(record.emails[0]) if record.emails else None
+    saved_birthday = str(record.birthday) if hasattr(record, 'birthday') else None
+    saved_address = str(record.address) if hasattr(record, 'address') else None
+
+    info_lines = [f"[bold green]✅ Added contact:[/bold green] [cyan]{name}[/cyan]"]
+
+    if saved_phone:
+        info_lines.append(f"[bold]📞 Phone:[/bold] {saved_phone}")
+    if saved_email:
+        info_lines.append(f"[bold]✉️  Email:[/bold] {saved_email}")
+    if saved_birthday:
+        info_lines.append(f"[bold]🎂 Birthday:[/bold] {saved_birthday}")
+    if saved_address:
+        info_lines.append(f"[bold]🏠 Address:[/bold] {saved_address}")
+
     console.print(
         Panel.fit(
-            f"[bold green]✅ Added contact:[/bold green] [cyan]{name}[/cyan]\n"
-            f"[bold]📞 Phone:[/bold] {phone or '[dim]—[/dim]'}\n"
-            f"[bold]✉️  Email:[/bold] {email or '[dim]—[/dim]'}\n"
-            f"[bold]🎂 Birthday:[/bold] {birthday or '[dim]—[/dim]'}\n"
-            f"[bold]🏠 Address:[/bold] {address or '[dim]—[/dim]'}",
+            "\n".join(info_lines),
             title="📇 [bold cyan]Contact Added[/bold cyan]",
             border_style="green"
         )
@@ -423,17 +435,26 @@ def edit_address(book, args):
 # see  birthdays [today + 7 days]
 # see birthday (number of days)
 def birthdays(book, args):
-    if args:
-        upcoming = book.birthdays(args[0])
+    if len(args) > 0 and args[0] is not None:
+        days = args[0]
     else:
-        upcoming = book.birthdays()
+        days = 7
+    try:
+        days = int(days)
+    except ValueError:
+        console.print("[red]Error: Please provide a valid number of days.[/red]")
+        return
+    if days < 0:
+        console.print("[red]Error: Please provide a positive number of days.[/red]")
+        return
+    upcoming = book.birthdays(days)
     
     if upcoming:
         console.print("[green]Upcoming birthdays:[/green]")
         for it in upcoming:
             console.print(f"[magenta]{it['name']}[/magenta] [yellow]on[/yellow] [magenta]{it['congratulation_date']}[/magenta]")
     else:
-        console.print(f"[magenta]No upcoming birthdays in the next {args[0] if args[0] else 7} days.[/magenta]")
+        console.print(f"[magenta]No upcoming birthdays in the next {days} days.[/magenta]")
         
 # Function to handle command "birthdays-all"
 # see all contact's birthdays 

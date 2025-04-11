@@ -6,7 +6,7 @@ class Email(Field):
     def __init__(self, value):
         if value is None or not self.validate_email(value):
             raise ValueError(
-                Text("Invalid email format: ", style="yellow") + Text(value, style="red"))
+                "[red]Invalid email format:[/red]", f"[red]{value}[/red]")
         super().__init__(value)
         
     @staticmethod

@@ -5,7 +5,7 @@ from rich.text import Text
 class Phone(Field):
     def __init__(self, value):
         if value is None or not self.validate_phone(value):
-            raise ValueError(f"{Text("Invalid phone number format: ", style='yellow')}{Text(value, style='red')}")
+            raise ValueError("[red]Invalid phone number format:[/red]", f"[red]{value}[/red]")
         super().__init__(value)
         
 

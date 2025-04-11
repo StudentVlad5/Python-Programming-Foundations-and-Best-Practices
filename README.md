@@ -137,21 +137,22 @@ The system handles serialization and deserialization of this data automatically.
 File Structure
 your_project_folder/
 │
-├── main.py                  # Main program file
-├── services/                # Contains service logic for AddressBook and Notes
-│   ├── address_book_manager.py
-│   ├── note_manager.py
-│   ├── commands_logs.py
-│   ├── data_parse_input.py
-│   ├── errors_wrap.py
-│   ├── file_manager.py
-│   └── promt_toolkit.py
-├── modules/                 # Contains the AddressBook and Notes classes
-│   ├── AddressBook_m/
-│   ├── Notes_m/
-│   └── Common_m/
+├── main-project             # Main program filder
+│    ├── services/           # Contains service logic for AddressBook and Notes
+│    │   ├── address_book_manager.py
+│    │   ├── note_manager.py
+│    │   ├── commands_logs.py
+│    │   ├── data_parse_input.py
+│    │   ├── errors_wrap.py
+│    │   ├── file_manager.py
+│    │   └── promt_toolkit.py
+│    ├── modules/            # Contains the AddressBook and Notes classes
+│    │   ├── AddressBook_m/
+│    │   ├── Notes_m/
+│    │   └── Common_m/
+│    ├── cli.py              # Utils for testing
+│    └──  main.py            # Main program file
 ├── requirements.txt         # List of dependencies
-├── cli.py                   # Utils for testing
 ├── .gitignore               # Git ignore file
 ├── log_file.txt             # Logs of user's commands
 ├── addressbook.pkl          # Data of address contacts
