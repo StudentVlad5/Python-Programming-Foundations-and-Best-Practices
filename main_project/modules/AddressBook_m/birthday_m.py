@@ -7,7 +7,7 @@ class Birthday(Field):
     def __init__(self, value):
         if value is None or not self.validate_birthday(value):
             raise ValueError(
-                f"{Text('Invalid date format. Use DD.MM.YYYY. You provided:', style='yellow')} + {Text(value, style='red')}"
+                "[red]Invalid date format. Use DD.MM.YYYY. You provided:[/red]", f"[red]{value}[/red]"
             )
         self.value = datetime.strptime(value, "%d.%m.%Y")
 

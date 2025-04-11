@@ -1,9 +1,9 @@
 from main_project.modules.Common_m.field import Field
-from termcolor import colored
+
 
 class Address(Field):
     def __init__(self, value):
         if value is None:
-            raise ValueError(f"{colored('Invalid address format: ', 'yellow')}{colored(value, 'red')}")
+            raise ValueError("[red]Invalid address format:[/red]", f"[red]{value}[/red]")
         super().__init__(value)
         
