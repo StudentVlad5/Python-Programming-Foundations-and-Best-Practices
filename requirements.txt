@@ -1,5 +1,4 @@
 click==8.1.8
-colorama==0.4.6
 iniconfig==2.1.0
 -e git+https://github.com/StudentVlad5/Python-Programming-Foundations-and-Best-Practices.git@633268d2ee2e88861eb148a614ab01118815a165#egg=main_project
 markdown-it-py==3.0.0
@@ -12,5 +11,4 @@ Pygments==2.19.1
 pytest==8.3.5
 rich==14.0.0
 setuptools==78.1.0
-termcolor==2.5.0
 wcwidth==0.2.13
