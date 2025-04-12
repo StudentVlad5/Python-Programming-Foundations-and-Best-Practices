@@ -116,7 +116,7 @@ Akso implemented a decorator for logging user commands.
 $ python main.py
 
 # Add a new contact
-Enter a command: add John 1234567890 john@example.com 01.01.1990 123 Street
+Enter a command: add John 1234567890 john@example.com 01.01.1990 123,Street
 
 # Show all contacts
 Enter a command: all-contacts
@@ -151,6 +151,7 @@ your_project_folder/
 │    │   ├── AddressBook_m/
 │    │   ├── Notes_m/
 │    │   └── Common_m/
+│    ├── tests/              # tests
 │    ├── cli.py              # Utils for testing
 │    └──  main.py            # Main program file
 ├── requirements.txt         # List of dependencies
