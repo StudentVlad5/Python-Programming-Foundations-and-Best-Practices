@@ -11,16 +11,27 @@ def log_request(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        if func.__name__ == "handle_user_input" and args:
-            command_str = args[0].split()[0]
+        log_msg = ""
+        if args:
+            if func.__name__ == "handle_user_input" and args:
+                if args[0]:
+                    command_str = args[0].split()[0]
+                    log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
+                else:
+                    command_str = "handle_user_input"
+                    log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
+            else:
+                command_str = func.__name__
+                log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
         else:
             command_str = func.__name__
-        log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
-
+            log_msg = f"{timestamp} | Command: {command_str} | Args: {args} \n"
+    
         with open(log_filename, "a", encoding="utf-8") as log_file:
             log_file.write(log_msg)
         
         return func(*args, **kwargs)
+    
     return wrapper
 
 # generator for logs

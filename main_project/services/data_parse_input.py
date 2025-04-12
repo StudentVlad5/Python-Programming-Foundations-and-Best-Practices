@@ -1,7 +1,8 @@
 def parse_input(user_input):
-    if not user_input.strip():
-        return "", [] 
+    parts = user_input.strip().split()
+    if not parts:
+        return None, []
 
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
+    cmd = parts[0].lower()
+    args = parts[1:]
     return cmd, args
