@@ -1,42 +1,60 @@
-import sys
-import os
 import pytest
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+import io, sys
+from main_project.services.note_manager import delete_tag, add_note
+from main_project.modules.Notes_m.note_m import Note
 
-from modules.Notes_m.note_m import Note
-from services.file_manager import load_data, save_data
-#from modules.Common_m.CONSTANT import filenameNotes
-from services.file_manager import load_data, save_data
-from services.note_manager import add_note, show_all_notes, add_tag, delete_tag, show_note, delete_note, search_tag, search_message, edit_title
+@pytest.fixture
+def notes():
+    return Note()
 
-def main():
-    filenameNotes = "notes_test.pkl"
-    notes = Note()
-    notes.data.update(load_data(notes, filenameNotes))
-    
-    print("--- show all notes ---")
-    show_all_notes(notes)
+def test_delete_tag(notes, monkeypatch):
+    fake_input = "line 1\nline 2\nline 3\n"
+    monkeypatch.setattr(sys, 'stdin', io.StringIO(fake_input))
+    # Add a note with a tag
+    add_note(notes, ["Test Note", "tag1"])
+    assert len(notes.data) == 1
+    assert "tag1" in notes.find("Test Note").tags[0].value
 
-    print("--- add note ---")
-    add_note(notes, ("new_message 01", "tag01"))
-    add_note(notes, ("new multiline message\nline 01\nline 02\n", "multiline"))
-    add_note(notes, ("new_message 02", "tag02"))
-    add_note(notes, ("new_message 01 02", "tag01"))
-    add_note(notes, ("new_message_03", "tag03"))
+    # Delete the tag
+    delete_tag(notes, ["Test Note", "tag1"])
+    assert len(notes.find("Test Note").tags) == 0
 
-    print("--- search message ---")
-    search_message(notes, "multiline")
-    search_message(notes, "new_message_03")
+def test_delete_nonexistent_tag(notes, monkeypatch):
+    fake_input = "line 1\nline 2\nline 3\n"
+    monkeypatch.setattr(sys, 'stdin', io.StringIO(fake_input))
+    # Add a note without tags
+    add_note(notes, ["Test Note"])
+    assert len(notes.data) == 1
 
-    print("--- show_note ---")
-    show_note(notes, "new_message_03")
+    # Try to delete a nonexistent tag
+    delete_tag(notes, ["Test Note", "nonexistent_tag"])
+    assert len(notes.find("Test Note").tags) == 0
 
-    show_all_notes(notes)
+def test_delete_tag_from_note_with_multiple_tags(notes, monkeypatch):
+    fake_input = "line 1\nline 2\nline 3\n"
+    monkeypatch.setattr(sys, 'stdin', io.StringIO(fake_input))
+    # Add a note with multiple tags
+    add_note(notes, ["Test Note", "tag1", "tag2", "tag3"])
+    assert len(notes.find("Test Note").tags) == 3
 
+    # Delete one tag
+    delete_tag(notes, ["Test Note", "tag2"])
+    remaining_tags = [tag.value for tag in notes.find("Test Note").tags]
+    assert "tag2" not in remaining_tags
+    assert len(remaining_tags) == 2
 
+def test_delete_tag_from_nonexistent_note(notes):
+    # Try to delete a tag from a note that doesn't exist
+    delete_tag(notes, ["Nonexistent Note", "tag1"])
+    assert len(notes.data) == 0
 
+def test_delete_tag_when_note_has_no_tags(notes, monkeypatch):
+    fake_input = "line 1\nline 2\nline 3\n"
+    monkeypatch.setattr(sys, 'stdin', io.StringIO(fake_input))
+    # Add a note without tags
+    add_note(notes, ["Test Note"])
+    assert len(notes.find("Test Note").tags) == 0
 
-if __name__ == "__main__":
-    main()
+    # Try to delete a tag
+    delete_tag(notes, ["Test Note", "tag1"])
+    assert len(notes.find("Test Note").tags) == 0
