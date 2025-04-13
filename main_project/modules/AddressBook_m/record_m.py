@@ -12,6 +12,50 @@ from rich import box
 console = Console()
 
 class Record:
+    """
+    A class representing a contact record in an address book.
+
+    This class contains attributes for a name, phone numbers, email addresses, 
+    birthday, and address. It provides methods to add, delete, and edit these 
+    details, as well as to display this information in a formatted manner.
+
+    Attributes:
+        name (Name): The name of the contact, represented by a Name object.
+        phones (list): A list of Phone objects representing the contact's phone numbers.
+        emails (list): A list of Email objects representing the contact's email addresses.
+        birthday (Birthday): The contact's birthday, represented by a Birthday object.
+        address (str): The contact's address.
+
+    Methods:
+        __init__(name): Initializes a new instance of the Record class with the given name.
+                        Raises ValueError if the name is invalid.
+        add_phone(phone): Adds a phone number to the contact. Returns 1 on success, 0 on failure.
+        add_birthday(birthday): Adds a birthday to the contact. Returns 1 on success, 0 on failure.
+        add_email(email): Adds an email address to the contact. Returns 1 on success, 0 on failure.
+        add_address(address): Adds an address to the contact. Returns 1 on success, 0 on failure.
+        delete_phone(phone): Deletes the specified phone number from the contact.
+        delete_birthday(): Deletes the birthday from the contact.
+        delete_address(): Deletes the address from the contact.
+        delete_email(email): Deletes the specified email address from the contact.
+        edit_phone(old_phone, new_phone): Updates the specified old phone number with a new one. Returns 1 on success, 0 on failure.
+        edit_birthday(new_birthday): Updates the contact's birthday with a new date. Returns 1 on success, 0 on failure.
+        edit_email(old_email, new_email): Updates the specified old email address with a new one. Returns 1 on success, 0 on failure.
+        edit_address(new_address): Updates the contact's address with a new one.
+                                   Returns 1 on success, 0 on failure.
+        show_birthday(): Displays the contact's birthday in a formatted string.
+        show_address(): Displays the contact's address in a formatted string.
+        show_email(): Displays the contact's email addresses in a formatted string.
+        show_phone(): Displays the contact's phone numbers in a formatted string.
+        show_contact(): Displays the complete contact information in a formatted table.
+        __str__(): Returns a string representation of the contact's details.
+
+    Usage:
+        record = Record("John Doe")
+        record.add_phone("1234567890")
+        record.add_email("john@example.com")
+        record.add_birthday("01.01.1980")
+        record.show_contact()
+    """
     def __init__(self, name):
         try:
             self.name = Name(name)
