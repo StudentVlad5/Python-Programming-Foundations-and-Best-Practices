@@ -1,3 +1,37 @@
+"""
+Main entry point for the assistant bot application that manages an address book and notes.
+
+This function initializes the address book and notes, loads existing data from files, 
+and enters an interactive loop that prompts users for commands. It utilizes the `prompt_toolkit` 
+for input handling and supports command completion.
+
+The program performs the following tasks:
+1. Initialize the AddressBook and Note objects.
+2. Load existing contacts and notes from specified data files.
+3. Display a welcome message upon starting.
+4. Continuously prompt the user for commands until they choose to exit.
+5. Parse the user's input to determine the command and corresponding arguments.
+6. Execute the appropriate command from the command dictionary or display an error message 
+   for invalid commands.
+7. Save any changes made to contacts and notes before exiting the application.
+
+Example Usage:
+    >>> main()  # Starts the assistant bot application
+
+User Interaction:
+- Users are presented with a prompt to enter a command.
+- Valid commands include those defined in the command dictionary and completion suggestions 
+  are provided from the command list.
+
+Notes:
+- The application uses the `load_data` and `save_data` functions from the `file_manager` 
+  service to manage data persistence.
+- The `parse_input` function is used to separate the command and its arguments.
+- Special commands such as `close` or `exit` will trigger data saving and termination of 
+  the application loop.
+- Displays rich formatted messages to enhance the user interface experience.
+
+"""
 from main_project.services.file_manager import load_data, save_data
 from main_project.services.data_parse_input import parse_input
 from main_project.services.prompt_toolkit import handle_user_input

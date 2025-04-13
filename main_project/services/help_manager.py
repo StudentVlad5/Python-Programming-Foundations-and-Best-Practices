@@ -2,6 +2,23 @@ from rich.console import Console
 from rich.table import Table
 
 def help():
+    """
+    Displays a table of available commands for the Address Book and Notes applications.
+
+    The table categorizes commands by functionality, providing a brief description of each command's 
+    purpose within the applications. The commands include options for managing contacts in an 
+    Address Book and interacting with notes.
+
+    It uses the `rich` library to create a formatted table that is displayed in the console.
+
+    The commands include:
+    - Address Book commands for viewing, adding, editing, and deleting contacts
+    - Notes commands for managing notes and their associated tags
+    - Logs and system commands for viewing logs and handling application control
+
+    Example Usage:
+        >>> help()  # Calls the help function to display available commands
+    """
     console = Console()
 
     table = Table(title="📚 Available Commands", show_lines=True)

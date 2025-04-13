@@ -1,3 +1,36 @@
+"""
+This module provides functionalities for managing notes in a command-line interface 
+using the `rich` library for formatted output.
+
+It allows users to add, edit, delete, and search notes and their associated tags. 
+Notes are represented as `Record` objects, which encapsulate a title, tags, and a message. 
+Data persistence is managed through file-saving operations.
+
+Dependencies:
+- Record from main_project.modules.Notes_m.record_m
+- save_data from main_project.services.file_manager
+- filenameNotes from main_project.modules.Common_m.CONSTANT
+- rich console components for enhanced display
+
+Functions:
+    add_note(notes, args): Adds a new note with the given title and optional tags.
+                           Prompts the user to input a message for the note.
+    add_tag(notes, args): Adds tags to an existing note identified by the title.
+    delete_tag(notes, args): Deletes a specified tag from an existing note.
+    show_all_notes(notes): Displays all existing notes, or a message if none are available.
+    show_note(notes, args): Displays the content of a specific note identified by the title.
+    edit_title(notes, args): Edits the title of an existing note.
+    delete_note(notes, args): Deletes a note based on the title provided.
+    search_tag(notes, args): Searches for notes containing a specified tag.
+    search_message(notes, args): Searches for notes containing a specified message input.
+    notes_print_helper(arr): A helper function to print a formatted table of notes and their details.
+
+Example Usage:
+    notes = Note()
+    add_note(notes, ["My First Note", "important", "urgent"])
+    show_all_notes(notes)
+    search_tag(notes, ["urgent"])
+"""
 from main_project.modules.Notes_m.record_m import Record
 from main_project.services.file_manager import save_data
 from main_project.modules.Common_m.CONSTANT import filenameNotes

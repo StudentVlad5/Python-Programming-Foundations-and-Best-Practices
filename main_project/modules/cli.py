@@ -1,3 +1,51 @@
+"""
+This script provides a command-line interface (CLI) utility for managing an address book. 
+It allows users to add, view, edit, and delete contacts, as well as manage associated 
+information such as phone numbers, emails, birthdays, and addresses.
+
+The application leverages the Click library to create a structured CLI, providing users 
+with a user-friendly interface for interacting with their contact data.
+
+Key Functionalities:
+- Add new contacts with detailed information (name, phone, birthday, email, address)
+- View all contacts and birthdays
+- Edit existing contact information (phone, email, birthday, address)
+- Delete contacts or specific pieces of contact information
+- Display specific details about a contact (phone, email, address, birthday)
+
+Usage:
+1. Run the script to initialize the address book.
+2. Use the following commands:
+   - `hello_cmd`: Greet the user.
+   - `all-contacts`: Show all contacts.
+   - `all-birthdays`: Show all birthdays.
+   - `add <name> <phone> <birthday> <email> <address>`: Add a new contact.
+   - `add-phone <name> <phone>`: Add phone to an existing contact.
+   - `add-email <name> <email>`: Add email to an existing contact.
+   - `add-birthday <name> <birthday>`: Add birthday to an existing contact.
+   - `add-address <name> <address>`: Add address to an existing contact.
+   - `contact <name>`: Show information about a specific contact.
+   - `phone <name>`: Show phone number of a specific contact.
+   - `email <name>`: Show email address of a specific contact.
+   - `address <name>`: Show address of a specific contact.
+   - `birthday_cmd <name>`: Show birthday of a specific contact.
+   - `birthdays <date>`: Show birthdays on a specific date.
+   - `edit-address <name> <new_address>`: Edit address of a contact.
+   - `edit-birthday <name> <new_birthday>`: Edit birthday of a contact.
+   - `edit-email <name> <old_email> <new_email>`: Edit email of a contact.
+   - `edit-phone <name> <old_phone> <new_phone>`: Edit phone number of a contact.
+   - `delete <name>`: Delete a contact.
+   - `delete-address <name>`: Delete address of a contact.
+   - `delete-birthday <name>`: Delete birthday of a contact.
+
+The script ensures that any changes made during the session are saved before exiting, 
+providing persistent data management via loading and saving functions.
+
+Note:
+- The script currently does not include functionality for managing notes,
+  as indicated by commented-out code related to note management.
+
+"""
 import click
 import contextlib
 from modules.AddressBook_m.addressbook_m import AddressBook
