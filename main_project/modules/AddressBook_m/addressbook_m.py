@@ -7,6 +7,34 @@ from rich.console import Console
 console = Console()
 
 class AddressBook(UserDict):
+    """
+    A class representing an address book, inheriting from UserDict.
+
+    The AddressBook class manages a collection of contact records, allowing
+    for adding, finding, deleting, and retrieving upcoming birthdays of contacts.
+
+    Attributes:
+        data (dict): A dictionary that stores records, where the key is the contact's name and the value is the corresponding Record object.
+
+    Methods:
+        add_record(record): Adds a new record to the address book. If the record has an invalid name (None), a message is printed to the console.
+
+        find(name): Searches for a contact record by name. Returns the corresponding Record object if found, otherwise returns None.
+
+        delete(name): Deletes the contact record identified by the given name. Returns 1 on successful deletion, or 0 if the record does not exist.
+        
+        birthdays(search_period=7): Retrieves a list of upcoming birthdays within the specified search period (in days). Returns a sorted 
+         list of birthday reminders containing the name and congratulation date.
+        __str__(): Returns a string representation of all records in the address book.
+
+    Usage:
+        address_book = AddressBook()
+        address_book.add_record(record)
+        contact = address_book.find("John Doe")
+        address_book.delete("Jane Smith")
+        upcoming_birthdays = address_book.birthdays(30)
+        print(address_book)
+    """
     def add_record(self, record):
         if record.name is None:
             console.print(Text("Cannot add a record with an invalid name.", style="red"))

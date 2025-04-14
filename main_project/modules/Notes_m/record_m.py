@@ -6,6 +6,39 @@ from rich.text import Text
 console=Console()
 
 class Record:
+    """
+    A class representing a note record with a title, tags, and a message.
+
+    This class manages a note's title, tags, and message, providing functionality
+    to add, delete, and edit tags associated with the note. It validates the title 
+    and manages lists of tags, ensuring that tags are unique (case-insensitive).
+
+    Attributes:
+        title (Title): The title of the note, represented by a Title object.
+        tags (list): A list of Tag objects associated with the note.
+        message (str): The message content of the note.
+
+    Methods:
+        __init__(title, tags=None, message=None): Initializes a new instance of the 
+                                                  Record class with the given title, 
+                                                  optional tags, and optional message.
+                                                  Raises ValueError if the title is invalid.
+        add_tag(tag): Adds a new tag to the note. Returns 1 on success, 0 if the
+                      tag already exists or if there is a ValueError.
+        delete_tag(tag): Deletes the specified tag from the note. Returns 1 on 
+                         success or 0 if no matching tag is found.
+        edit_tag(old_tag, new_tag): Edits an existing tag by replacing it with a new tag.
+                                     Returns 1 on success, or raises a ValueError if 
+                                     the old tag is not found.
+        __str__(): Returns a string representation of the note including the title,
+                   tags, and message in a formatted manner.
+
+    Usage:
+        record = Record("My First Note", ["personal", "important"], "This is the content.")
+        record.add_tag("urgent")
+        record.edit_tag("important", "high priority")
+        print(record)
+    """
     def __init__(self, title, tags=None, message=None):
         try:
             self.title = Title(title)
@@ -29,19 +62,6 @@ class Record:
         except ValueError as e:
             console.print(Text(f"Error: {e}", style='red'))
             return 0
-
-    # def add_tag(self, tag):
-    #     try:
-    #         print(tag in self.tags)
-    #         if tag in self.tags:
-    #             console.print(Text(f"Tag '{tag}' already exists under the title '{self.title}", style='red'))
-    #             return 0
-    #         else:
-    #             self.tags.append(Tag(tag))
-    #             return 1
-    #     except ValueError as e:
-    #         console.print(Text(f"Error: {e}", style='red'))
-    #         return 0
 
     def delete_tag(self, tag):
         try: 

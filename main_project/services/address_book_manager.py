@@ -1,3 +1,48 @@
+"""
+This module provides functionality to manage an address book, allowing users to add, 
+edit, delete, and retrieve contact information such as names, phone numbers, emails, 
+birthdays, and addresses. It utilizes the Rich library for visually appealing console output.
+
+The module includes the following functions:
+
+1. Command Handling Functions:
+    - hello(book): Displays a greeting message.
+    - add_contact(book, args): Adds a new contact with optional details (phone, birthday, 
+      email, address). Saves the updated address book to a file.
+    - add_name(book, args): Adds a new contact by name without additional details.
+    - add_phone(book, args): Adds a phone number for an existing contact.
+    - add_email(book, args): Adds an email for an existing contact.
+    - add_birthday(book, args): Adds a birthday for an existing contact.
+    - add_address(book, args): Adds an address for an existing contact.
+    - show_all_contacts(book): Displays all contacts in a formatted table.
+    - show_contact(book, args): Displays contact details for a specific contact by name.
+    - show_phone(book, args): Displays phone numbers for a specific contact.
+    - show_email(book, args): Displays email addresses for a specific contact.
+    - show_birthday(book, args): Displays the birthday for a specific contact.
+    - show_address(book, args): Displays the address for a specific contact.
+    - delete_contact(book, args): Deletes a contact by name from the address book.
+    - delete_phone(book, args): Deletes a specific phone number from a contact.
+    - delete_email(book, args): Deletes a specific email address from a contact.
+    - delete_birthday(book, args): Deletes the birthday for a contact.
+    - delete_address(book, args): Deletes the address for a contact.
+    - edit_phone(book, args): Edits an existing phone number for a contact.
+    - edit_email(book, args): Edits an existing email address for a contact.
+    - edit_birthday(book, args): Edits an existing birthday for a contact.
+    - edit_address(book, args): Edits an existing address for a contact.
+    - birthdays(book, args): Displays upcoming birthdays within a specified number of days.
+    - birthdays_all(book): Displays all birthdays for all contacts.
+    - search_contact(book, args): Searches for contacts by name and displays matching results.
+
+2. Data Handling:
+   - The module uses a Record class (imported from the record module) to create and manage 
+     individual contact records.
+   - It integrates a file manager service to save data to a specified file (imported from 
+     file_manager).
+
+Example Usage:
+    >>> hello(my_address_book)
+    >>> add_contact(my_address_book, ["John Doe", "123-456-7890", "john@example.com"])
+"""
 from main_project.modules.AddressBook_m.record_m import Record
 from main_project.modules.Common_m.CONSTANT import filename
 from main_project.services.file_manager import save_data

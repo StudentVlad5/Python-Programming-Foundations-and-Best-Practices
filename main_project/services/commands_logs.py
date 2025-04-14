@@ -1,3 +1,28 @@
+"""
+This module provides functionality for logging function calls and managing log entries
+in a simple command-line application. It includes a decorator for logging requests, 
+functions to display logs, and a way to analyze logs by date.
+
+Logging Decorator:
+    log_request(func): A decorator that logs the timestamp, command name, and arguments
+                       of a function call to a specified log file.
+
+Log Management Functions:
+    parse_logs(log_filename): A generator that reads log entries from the specified file,
+                              yielding tuples of (timestamp, function name, arguments).
+    all_logs(): Displays all logged entries in a formatted table in the console.
+    logs_by_date(args): Displays logs for a specified date, formatting the output in a table.
+    stats_by_date(args): Displays the count of commands executed on a specified date.
+
+Constants:
+    log_filename (str): The file path where logs are stored, imported from the application's 
+                        CONSTANT module.
+
+Example Usage:
+    @log_request
+    def sample_function(arg1, arg2):
+        # function implementation
+"""
 from functools import wraps
 from datetime import datetime
 from rich.console import Console
@@ -8,6 +33,19 @@ console = Console()
 
 #log decorator
 def log_request(func):
+    """
+    A decorator to log function calls with their arguments and timestamps.
+
+    This decorator wraps a function and writes a log entry each time the function is called. 
+    It logs the timestamp, the function name, and the arguments provided to the function. 
+    The logs are written to the specified log file.
+
+    Parameters:
+        func (function): The function to be wrapped and logged.
+
+    Returns:
+        function: The wrapped function, with logging functionality added.
+    """
     @wraps(func)
     def wrapper(*args, **kwargs):
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -36,6 +74,20 @@ def log_request(func):
 
 # generator for logs
 def parse_logs(log_filename):
+    """
+    Reads and parses log entries from the specified log file.
+
+    This function yields tuples containing timestamp, function name, and arguments
+    for each log entry in the file. If the file is not found, it yields None.
+
+    Parameters:
+        log_filename (str): The path to the log file to read.
+
+    Yields:
+        tuple: A tuple of (timestamp, function name, arguments) for each log entry.
+               If the log format is incorrect, empty strings are returned.
+               Yields None if the log file is not found.
+    """
     try:
         with open(log_filename, "r", encoding="utf-8") as file:
             for line in file:
@@ -53,6 +105,16 @@ def parse_logs(log_filename):
 
 #see all logs
 def all_logs():
+    """
+    Displays all logs in a formatted table in the console.
+
+    This function retrieves all log entries using `parse_logs` and presents them 
+    in a readable format, using a rich table for better visualization. If the log 
+    file is not found or is empty, appropriate messages are printed.
+
+    Returns:
+        None
+    """
     log_rows = parse_logs(log_filename)
 
     console = Console()
@@ -77,6 +139,19 @@ def all_logs():
 
 #see logs by date
 def logs_by_date(args):
+    """
+    Displays logs that match a specified date.
+
+    This function takes a date argument in the format YYYY-MM-DD, reads the log file, 
+    and presents entries that correspond to that date in a formatted table. 
+    If the date argument is missing or invalid, an error message is displayed.
+
+    Parameters:
+        args (list): A list containing the date as the first element.
+
+    Returns:
+        None
+    """
     if not args:
         console.print("[red]Missing date argument.[/red]")
         return
@@ -117,6 +192,20 @@ def logs_by_date(args):
     console.print(table)
 
 def stats_by_date(args):
+    """
+    Displays command execution statistics for a specified date.
+
+    This function takes a date argument in the format YYYY-MM-DD, 
+    reads the log file, and counts how many times each command was executed on that date.
+    The results are displayed in a formatted table. If the date argument is missing or 
+    invalid, or if no logs are found for that date, appropriate messages are displayed.
+
+    Parameters:
+        args (list): A list containing the date as the first element.
+
+    Returns:
+        None
+    """
     if not args:
         console.print("[red]Missing date argument.[/red]")
         return
